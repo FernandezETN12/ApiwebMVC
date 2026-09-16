@@ -1,8 +1,161 @@
 ﻿@{
-    ViewData["Title"] = "Pizzeria";
+ViewData["Tittle"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Primera Vista</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<section class="home-hero">
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <span class="hero-badge">🍕 PIZZERÍA ARTESANAL</span>
+
+
+            <h1 class="display-3 fw-bold mt-3">
+                El sabor que siempre querés repetir.
+            </h1>
+
+            <p class="lead mt-4">
+                Pizzas hechas en el momento, con ingredientes frescos
+                y todo el sabor de una buena pizzería.
+            </p>
+
+            <div class="mt-4">
+                <a asp-controller="Menu"
+                   asp-action="Index"
+                   class="btn btn-primary btn-lg px-4 me-2">
+                    Ver nuestro menú
+                </a>
+
+                <a asp-controller="Nosotros"
+                   asp-action="Index"
+                   class="btn btn-outline-dark btn-lg px-4">
+                    Conocenos
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-6 text-center mt-5 mt-lg-0">
+            <div class="hero-pizza">
+                <div class="pizza-circle">
+                    🍕
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+```
+
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <span class="section-label">¿POR QUÉ ELEGIRNOS?</span>
+
+            <h2 class="fw-bold mt-2">
+                Hecho con ganas de hacerlo bien
+            </h2>
+
+            <p class="text-muted mt-3">
+                Nos gusta hacer las cosas simples: buenos ingredientes,
+                pizzas abundantes y un sabor que quieras volver a probar.
+            </p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="feature-card text-center h-100">
+                <div class="feature-icon">🥬</div>
+
+                <h4 class="fw-bold">Ingredientes frescos</h4>
+
+                <p class="text-muted mb-0">
+                    Seleccionamos ingredientes de calidad para cada pizza.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-card text-center h-100">
+                <div class="feature-icon">🔥</div>
+
+                <h4 class="fw-bold">Preparadas al momento</h4>
+
+                <p class="text-muted mb-0">
+                    Cada pedido se prepara para que llegue recién hecho.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-card text-center h-100">
+                <div class="feature-icon">❤️</div>
+
+                <h4 class="fw-bold">Hechas con pasión</h4>
+
+                <p class="text-muted mb-0">
+                    Una buena pizza no necesita complicaciones.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</section>
+
+<section class="menu-banner">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="section-label light">NUESTRO MENÚ</span>
+
+            <h2 class="fw-bold mt-2">
+                ¿Ya sabés qué pizza querés?
+            </h2>
+
+            <p class="mb-0">
+                Mirá todas nuestras opciones y elegí tu favorita.
+            </p>
+        </div>
+
+        <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+            <a asp-controller="Menu"
+               asp-action="Index"
+               class="btn btn-light btn-lg px-4">
+                Ver pizzas 🍕
+            </a>
+        </div>
+    </div>
+</div>
+
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4 text-center">
+
+        <div class="col-md-4">
+            <h5 class="fw-bold">📍 Encontranos</h5>
+            <p class="text-muted mb-0">
+                Tu pizzería de confianza
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <h5 class="fw-bold">🕐 Horarios</h5>
+            <p class="text-muted mb-0">
+                Todos los días
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <h5 class="fw-bold">📞 Pedidos</h5>
+            <p class="text-muted mb-0">
+                Hacé tu pedido desde nuestra página
+            </p>
+        </div>
+
+    </div>
+</div>
+</section>

@@ -1,69 +1,132 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Pizzeria</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
     <script type="importmap"></script>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ApiwebMVC.styles.css" asp-append-version="true" />
 </head>
+
 <body>
+
+    <!-- NAVBAR -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <nav class="navbar navbar-expand-lg pizzeria-navbar">
             <div class="container">
-                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
-                    <span class="brand-logo me-2">🍕</span>
-                    <span class="brand-title">Pizzeria</span>
+
+                <a class="navbar-brand pizzeria-logo"
+                   asp-controller="Home"
+                   asp-action="Index">
+
+                    <span class="logo-icon">🍕</span>
+
+                    <span>
+                        <strong>Pizzería</strong>
+                        <small>PIZZAS QUE UNEN</small>
+                    </span>
+
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav"
+                        aria-controls="navbarNav"
+                        aria-expanded="false"
+                        aria-label="Abrir menú">
+
                     <span class="navbar-toggler-icon"></span>
+
                 </button>
 
-                <div class="collapse navbar-collapse" id="mainNav">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
-                        <li class="nav-item"><a class="nav-link" asp-controller="Menu" asp-action="Index">Pizzas</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Nosotros" asp-action="Index">Nosotros</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Clientes" asp-action="Index">Clientes</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Pedidos" asp-action="Index">Pedidos</a></li>
-                        <li class="nav-item ms-3">
-                            <a class="btn btn-primary btn-sm" asp-controller="Menu" asp-action="Index">Ver menú</a>
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+                    <ul class="navbar-nav mx-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Index">
+                                Inicio
+                            </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Menu"
+                               asp-action="Index">
+                                Menú
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Nosotros"
+                               asp-action="Index">
+                                Nosotros
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Pedidos"
+                               asp-action="Index">
+                                Mi pedido
+                            </a>
+                        </li>
+
                     </ul>
+
+                    <a class="cart-button" href="#">
+                        🛒
+                        <span>0</span>
+                    </a>
+
                 </div>
+
             </div>
         </nav>
-        <section class="hero">
-            <div class="container">
-                <div class="hero-content text-center">
-                    <h1>Pizzas artesanales, sabor inolvidable</h1>
-                    <p class="lead">Hechas con ingredientes frescos y pasión por la tradición.</p>
-                    <p>
-                        <a class="btn btn-lg btn-primary me-2" asp-controller="Menu" asp-action="Index">Ver menú</a>
-                        <a class="btn btn-lg btn-outline-primary" asp-controller="Pedidos" asp-action="Create">Pedir ahora</a>
-                    </p>
-                </div>
-            </div>
-        </section>
     </header>
+
+
+    <!-- CONTENIDO DE CADA PÁGINA -->
     <div class="container">
         <main role="main" class="pb-3">
+
             @RenderBody()
+
         </main>
     </div>
 
+
+    <!-- FOOTER -->
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - ApiwebMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2026 - Pizzeria -
+            <a asp-controller="Home" asp-action="Privacy">
+                Privacy
+            </a>
         </div>
     </footer>
+
+
+    <!-- SCRIPTS -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
+
 </html>
