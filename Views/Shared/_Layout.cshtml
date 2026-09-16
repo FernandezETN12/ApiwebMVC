@@ -17,16 +17,13 @@
     <link rel="stylesheet" href="~/ApiwebMVC.styles.css" asp-append-version="true" />
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-    <!-- NAVBAR -->
     <header>
         <nav class="navbar navbar-expand-lg pizzeria-navbar">
             <div class="container">
 
-                <a class="navbar-brand pizzeria-logo"
-                   asp-controller="Home"
-                   asp-action="Index">
+                <a class="navbar-brand pizzeria-logo" asp-controller="Home" asp-action="Index">
 
                     <span class="logo-icon">🍕</span>
 
@@ -37,13 +34,8 @@
 
                 </a>
 
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav"
-                        aria-controls="navbarNav"
-                        aria-expanded="false"
-                        aria-label="Abrir menú">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menú">
 
                     <span class="navbar-toggler-icon"></span>
 
@@ -54,33 +46,25 @@
                     <ul class="navbar-nav mx-auto">
 
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Home"
-                               asp-action="Index">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
                                 Inicio
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Menu"
-                               asp-action="Index">
+                            <a class="nav-link" asp-controller="Menu" asp-action="Index">
                                 Menú
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Nosotros"
-                               asp-action="Index">
+                            <a class="nav-link" asp-controller="Nosotros" asp-action="Index">
                                 Nosotros
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Pedidos"
-                               asp-action="Index">
+                            <a class="nav-link" asp-controller="Pedidos" asp-action="Index">
                                 Mi pedido
                             </a>
                         </li>
@@ -98,24 +82,16 @@
         </nav>
     </header>
 
-
-    <!-- CONTENIDO DE CADA PÁGINA -->
     <div class="container">
-        <main role="main" class="pb-3">
-
+        <main role="main" class="flex-grow-1">
             @RenderBody()
-
         </main>
     </div>
 
-
-    <!-- FOOTER -->
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted mt-auto">
         <div class="container">
             &copy; 2026 - Pizzeria -
-            <a asp-controller="Home" asp-action="Privacy">
-                Privacy
-            </a>
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 

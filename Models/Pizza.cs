@@ -7,5 +7,7 @@ public class Pizza
     public string Descripcion { get; set; } = string.Empty;
     public decimal Precio { get; set; }
     public List<string> Ingredientes { get; set; } = new();
+    
+    public string ImagenURL {get;set;} = string.Empty;
     public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
 }
