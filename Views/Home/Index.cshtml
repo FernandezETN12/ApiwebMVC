@@ -1,161 +1,142 @@
 ﻿@{
-ViewData["Tittle"] = "Inicio";
+    ViewData["Title"] = "Inicio";
 }
 
-<section class="home-hero">
-    <div class="container">
-        <div class="row align-items-center min-vh-75">
-            <div class="col-lg-6">
-                <span class="hero-badge">🍕 PIZZERÍA ARTESANAL</span>
-
-
-            <h1 class="display-3 fw-bold mt-3">
-                El sabor que siempre querés repetir.
-            </h1>
-
-            <p class="lead mt-4">
-                Pizzas hechas en el momento, con ingredientes frescos
-                y todo el sabor de una buena pizzería.
+<section class="brand-hero">
+    <div class="container brand-hero__inner">
+        <div class="brand-hero__content">
+            <p class="eyebrow">Pizzería artesanal</p>
+            <h1>La pizza, como debería ser.</h1>
+            <p class="lead">
+                Masa fermentada con paciencia, ingredientes honestos y un fuego que deja cada borde perfecto.
             </p>
 
-            <div class="mt-4">
-                <a asp-controller="Menu"
-                   asp-action="Index"
-                   class="btn btn-primary btn-lg px-4 me-2">
-                    Ver nuestro menú
+            <div class="hero-actions">
+                <a asp-controller="Menu" asp-action="Index" class="btn btn-primary btn-lg px-4">
+                    Ver menú
                 </a>
-
-                <a asp-controller="Nosotros"
-                   asp-action="Index"
-                   class="btn btn-outline-dark btn-lg px-4">
-                    Conocenos
+                <a asp-controller="Nosotros" asp-action="Index" class="btn btn-link btn-lg px-0">
+                    Nuestra historia
                 </a>
             </div>
-        </div>
 
-        <div class="col-lg-6 text-center mt-5 mt-lg-0">
-            <div class="hero-pizza">
-                <div class="pizza-circle">
-                    🍕
+            <div class="hero-meta">
+                <div>
+                    <strong>18h</strong>
+                    <span>de fuego cada día</span>
+                </div>
+                <div>
+                    <strong>100%</strong>
+                    <span>masa madre</span>
+                </div>
+                <div>
+                    <strong>5 min</strong>
+                    <span>de espera</span>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-```
 
-</section>
-
-<section class="py-5">
-    <div class="container">
-        <div class="row text-center mb-5">
-            <div class="col-lg-8 mx-auto">
-                <span class="section-label">¿POR QUÉ ELEGIRNOS?</span>
-
-            <h2 class="fw-bold mt-2">
-                Hecho con ganas de hacerlo bien
-            </h2>
-
-            <p class="text-muted mt-3">
-                Nos gusta hacer las cosas simples: buenos ingredientes,
-                pizzas abundantes y un sabor que quieras volver a probar.
-            </p>
-        </div>
-    </div>
-
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="feature-card text-center h-100">
-                <div class="feature-icon">🥬</div>
-
-                <h4 class="fw-bold">Ingredientes frescos</h4>
-
-                <p class="text-muted mb-0">
-                    Seleccionamos ingredientes de calidad para cada pizza.
-                </p>
+        <div class="brand-hero__visual">
+            <div class="hero-plate">
+                <div class="hero-pizza">
+                    <div class="pizza-base"></div>
+                    <div class="pizza-sauce"></div>
+                    <div class="pizza-cheese"></div>
+                    <span class="topping topping--one"></span>
+                    <span class="topping topping--two"></span>
+                    <span class="topping topping--three"></span>
+                    <span class="topping topping--four"></span>
+                    <span class="basil basil--one">❦</span>
+                    <span class="basil basil--two">❦</span>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="feature-card text-center h-100">
-                <div class="feature-icon">🔥</div>
-
-                <h4 class="fw-bold">Preparadas al momento</h4>
-
-                <p class="text-muted mb-0">
-                    Cada pedido se prepara para que llegue recién hecho.
-                </p>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="feature-card text-center h-100">
-                <div class="feature-icon">❤️</div>
-
-                <h4 class="fw-bold">Hechas con pasión</h4>
-
-                <p class="text-muted mb-0">
-                    Una buena pizza no necesita complicaciones.
-                </p>
+            <div class="floating-card">
+                <span>Especial de la semana</span>
+                <strong>Fuego · Alba · Rúcula</strong>
             </div>
         </div>
     </div>
-</div>
-
 </section>
 
-<section class="menu-banner">
+<section class="signature">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <span class="section-label light">NUESTRO MENÚ</span>
-
-            <h2 class="fw-bold mt-2">
-                ¿Ya sabés qué pizza querés?
-            </h2>
-
-            <p class="mb-0">
-                Mirá todas nuestras opciones y elegí tu favorita.
-            </p>
+        <div class="section-head">
+            <p class="eyebrow eyebrow--muted">Pizzas de temporada</p>
+            <h2>Lo esencial nunca pasa de moda.</h2>
         </div>
 
-        <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
-            <a asp-controller="Menu"
-               asp-action="Index"
-               class="btn btn-light btn-lg px-4">
-                Ver pizzas 🍕
-            </a>
+        <div class="signature-grid">
+            <article class="pizza-card pizza-card--warm">
+                <div class="pizza-card__top">
+                    <span class="pizza-badge">Clásica</span>
+                    <span class="pizza-price">$18.000</span>
+                </div>
+                <h3>Margherita</h3>
+                <p>Tomate, mozzarella, albahaca y un toque de aceite de oliva.</p>
+            </article>
+
+            <article class="pizza-card pizza-card--neutral">
+                <div class="pizza-card__top">
+                    <span class="pizza-badge">Top</span>
+                    <span class="pizza-price">$22.000</span>
+                </div>
+                <h3>Rúcula & Parmesano</h3>
+                <p>Un equilibrio entre intensidad, frescura y aroma.</p>
+            </article>
+
+            <article class="pizza-card pizza-card--dark">
+                <div class="pizza-card__top">
+                    <span class="pizza-badge">Fuerte</span>
+                    <span class="pizza-price">$24.000</span>
+                </div>
+                <h3>Diavola</h3>
+                <p>Salami picante, mozzarella, ajo y un final ahumado.</p>
+            </article>
         </div>
     </div>
-</div>
-
 </section>
 
-<section class="py-5">
-    <div class="container">
-        <div class="row g-4 text-center">
-
-        <div class="col-md-4">
-            <h5 class="fw-bold">📍 Encontranos</h5>
-            <p class="text-muted mb-0">
-                Tu pizzería de confianza
+<section class="ritual">
+    <div class="container ritual__inner">
+        <div class="ritual__text">
+            <p class="eyebrow">Nuestro ritual</p>
+            <h2>Desde la masa hasta la mesa, cada detalle cuenta.</h2>
+            <p>
+                Trabajamos con paciencia: amasamos, dejamos reposar, y solo entonces la llevamos al horno
+                con la temperatura justa para lograr una corteza aireada y un centro jugoso.
             </p>
+            <ul>
+                <li>Harina seleccionada y fermentación lenta</li>
+                <li>Ingredientes frescos, sin artificios</li>
+                <li>Preparada en el momento exacto</li>
+            </ul>
         </div>
 
-        <div class="col-md-4">
-            <h5 class="fw-bold">🕐 Horarios</h5>
-            <p class="text-muted mb-0">
-                Todos los días
-            </p>
+        <div class="ritual__panel">
+            <div class="ritual__panel-inner">
+                <span class="ritual__label">Desde 2018</span>
+                <strong>Sin prisa, ni exceso.</strong>
+                <p>La mejor pizza no necesita ruido: solo aroma, calor y buena compañía.</p>
+            </div>
         </div>
-
-        <div class="col-md-4">
-            <h5 class="fw-bold">📞 Pedidos</h5>
-            <p class="text-muted mb-0">
-                Hacé tu pedido desde nuestra página
-            </p>
-        </div>
-
     </div>
-</div>
+</section>
+
+<section class="statement">
+    <div class="container">
+        <blockquote>“La mejor pizza no se anuncia; se recuerda.”</blockquote>
+    </div>
+</section>
+
+<section class="cta-strip">
+    <div class="container cta-strip__inner">
+        <div>
+            <p class="eyebrow eyebrow--light">Reserva o pide hoy</p>
+            <h3>Tu próxima noche empieza con una pizza.</h3>
+        </div>
+        <a asp-controller="Menu" asp-action="Index" class="btn btn-light btn-lg px-4">
+            Hacer pedido
+        </a>
+    </div>
 </section>

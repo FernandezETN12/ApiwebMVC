@@ -1,0 +1,103 @@
+Posibles mejoras
+
+Guía paso a paso para automatizar la base de datos
+
+Objetivo
+
+Evitar tener que entrar manualmente a MySQL Workbench y ejecutar los scripts de la base de datos cada vez que se inicia el proyecto.
+
+Importante
+
+Esta guía describe los pasos que se deberán realizar más adelante. No se implementarán ahora.
+
+Opción recomendada: migraciones de Entity Framework Core y seeder automático
+
+Paso 1: Revisar la conexión a MySQL
+
+1. Abrir el archivo appsettings.json.
+2. Revisar la cadena DefaultConnection.
+3. Confirmar que el servidor, puerto, nombre de la base, usuario y contraseña sean correctos.
+4. Comprobar desde MySQL Workbench que la base pizzeria_db exista y permita conexiones.
+
+Paso 2: Instalar o comprobar las herramientas de Entity Framework
+
+1. Abrir una terminal en la carpeta del proyecto.
+2. Comprobar que la herramienta dotnet ef esté instalada.
+3. Si no está disponible, instalar la herramienta de Entity Framework Core.
+4. Verificar que la versión de la herramienta sea compatible con los paquetes del proyecto.
+
+Paso 3: Crear la migración inicial
+
+1. Revisar que ApplicationDbContext represente las tablas y relaciones del proyecto.
+2. Crear una migración inicial con el nombre adecuado.
+3. Revisar los archivos generados dentro de la carpeta Migrations.
+4. Comparar la migración con las tablas que ya existen en MySQL Workbench.
+
+Advertencia: como las tablas fueron creadas anteriormente con scripts SQL, no se debe aplicar la migración directamente sin comprobar antes si intentará crear tablas que ya existen.
+
+Paso 4: Aplicar la migración
+
+1. Hacer una copia de seguridad de la base de datos.
+2. Aplicar la migración desde la terminal.
+3. Abrir MySQL Workbench.
+4. Confirmar que las tablas y la tabla de historial de migraciones se hayan creado correctamente.
+
+Paso 5: Crear un seeder para las pizzas
+
+1. Crear una clase encargada de cargar datos iniciales.
+2. Definir las seis pizzas dentro del seeder o utilizar un archivo de datos controlado.
+3. Comprobar si ya existen pizzas antes de insertar.
+4. Insertar las pizzas únicamente cuando la tabla esté vacía.
+5. Evitar insertar duplicados cada vez que se reinicia la aplicación.
+
+Paso 6: Ejecutar el seeder al iniciar la aplicación
+
+1. Crear un ámbito de servicios al iniciar la aplicación.
+2. Obtener una instancia de ApplicationDbContext.
+3. Aplicar las migraciones pendientes.
+4. Ejecutar el seeder.
+5. Registrar posibles errores en los logs.
+
+Paso 7: Probar el inicio automático
+
+1. Detener la aplicación.
+2. Comprobar en MySQL Workbench el estado de la tabla Pizzas.
+3. Iniciar nuevamente el proyecto.
+4. Verificar que la base de datos se prepare automáticamente.
+5. Entrar al menú y confirmar que las pizzas aparezcan.
+6. Reiniciar una segunda vez y confirmar que no se dupliquen.
+
+Paso 8: Mantener MySQL Workbench
+
+MySQL Workbench se podrá seguir utilizando para consultar datos, revisar tablas, hacer copias de seguridad y controlar la base de datos. La diferencia será que ya no será necesario ejecutar manualmente los inserts en cada inicio.
+
+Otras opciones
+
+1. Ejecutar Inserts.SQL automáticamente desde la aplicación.
+
+La aplicación comprobaría si existen pizzas y ejecutaría Inserts.SQL cuando la tabla estuviera vacía. Es sencillo, pero menos flexible para cambios futuros.
+
+2. Usar EnsureCreated.
+
+Puede crear la base y las tablas si no existen, pero no administra correctamente los cambios de estructura. Es útil para pruebas pequeñas, no como solución principal.
+
+3. Usar Docker Compose.
+
+MySQL y la aplicación podrían iniciarse juntos. Los scripts SQL se ejecutarían al crear el contenedor de la base de datos.
+
+4. Usar un script externo.
+
+Un archivo .sh, .bat o una tarea de VS Code podría preparar la base de datos y luego iniciar la aplicación.
+
+Conclusión
+
+La opción recomendada para este proyecto es:
+
+1. Revisar la conexión a MySQL.
+2. Crear y revisar las migraciones de Entity Framework Core.
+3. Aplicar las migraciones de forma controlada.
+4. Crear un seeder automático.
+5. Ejecutar el seeder al iniciar la aplicación.
+6. Probar que las pizzas se carguen una sola vez.
+
+Estos pasos se deberán implementar en ese orden cuando se decida automatizar la base de datos.

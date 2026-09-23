@@ -1,3 +1,25 @@
+:root {
+--pizzeria-red: #b8121b;
+--pizzeria-red-dark: #760c14;
+--pizzeria-red-light: #fff7f3;
+--pizzeria-ink: #171412;
+--pizzeria-ink-soft: #2c2422;
+--pizzeria-panel: #121010;
+--pizzeria-panel-soft: #1b1716;
+--pizzeria-cream: #ffffff;
+--pizzeria-gold: #f2c67a;
+}
+
+body {
+background: #ffffff;
+color: var(--pizzeria-ink);
+}
+
+.page-content {
+flex: 1 0 auto;
+width: 100%;
+}
+
 .home-hero {
 background: linear-gradient(135deg, #fff8f0 0%, #ffffff 70%);
 padding: 2rem 0 4rem;
@@ -104,9 +126,9 @@ font-size: 2.5rem;
 }
 
 .pizzeria-navbar {
-    background-color: #fffaf5;
+    background-color: var(--pizzeria-red);
     min-height: 80px;
-    border-bottom: 1px solid #eee3da;
+    border-bottom: 1px solid var(--pizzeria-red-dark);
     padding: 0.7rem 0;
 }
 
@@ -115,7 +137,7 @@ font-size: 2.5rem;
     align-items: center;
     gap: 10px;
     text-decoration: none;
-    color: #252525 !important;
+    color: #fff !important;
 }
 
 .logo-icon {
@@ -131,7 +153,7 @@ font-size: 2.5rem;
 
 .pizzeria-logo small {
     display: block;
-    color: #d9472f;
+    color: #ffd8d4;
     font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 2px;
@@ -139,7 +161,7 @@ font-size: 2.5rem;
 }
 
 .pizzeria-navbar .nav-link {
-    color: #292929 !important;
+    color: #fff !important;
     font-size: 1rem;
     font-weight: 500;
     padding: 0.7rem 1.1rem !important;
@@ -148,7 +170,7 @@ font-size: 2.5rem;
 }
 
 .pizzeria-navbar .nav-link:hover {
-    color: #d9472f !important;
+    color: #ffd8d4 !important;
 }
 
 
@@ -159,7 +181,7 @@ font-size: 2.5rem;
     bottom: 3px;
     width: 0;
     height: 2px;
-    background-color: #d9472f;
+    background-color: #ffd8d4;
     transform: translateX(-50%);
     transition: width 0.2s ease;
 }
@@ -170,14 +192,14 @@ font-size: 2.5rem;
 
 .cart-button {
     position: relative;
-    color: #292929;
+    color: #fff;
     font-size: 1.5rem;
     text-decoration: none;
     padding: 8px;
 }
 
 .cart-button:hover {
-    color: #d9472f;
+    color: #ffd8d4;
 }
 
 .cart-button span {
@@ -192,7 +214,7 @@ font-size: 2.5rem;
     align-items: center;
     justify-content: center;
 
-    background-color: #d9472f;
+    background-color: var(--pizzeria-red-dark);
     color: white;
 
     border-radius: 50%;
@@ -211,5 +233,975 @@ font-size: 2.5rem;
         display: block;
         width: fit-content;
         margin: 10px auto;
+    }
+}
+
+    .home-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 6rem 0 6.5rem;
+        background: var(--pizzeria-red-dark);
+        color: #fffaf5;
+    }
+
+    .home-hero::after {
+        position: absolute;
+        right: -8rem;
+        bottom: -10rem;
+        width: 28rem;
+        height: 28rem;
+        border: 1px solid rgba(255, 216, 212, .22);
+        border-radius: 50%;
+        content: "";
+    }
+
+    .hero-kicker {
+        color: #ffc9c2;
+        font-size: .75rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+    }
+
+    .hero-title {
+        max-width: 560px;
+        margin: 0;
+        font-family: Georgia, serif;
+        font-size: clamp(3.5rem, 7vw, 6.5rem);
+        line-height: .96;
+        letter-spacing: 0;
+    }
+
+    .hero-copy {
+        max-width: 460px;
+        color: #f6d9d5;
+        font-size: 1.15rem;
+        line-height: 1.7;
+    }
+
+    .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .hero-text-link {
+        color: #fffaf5;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .hero-text-link:hover {
+        color: #ffc9c2;
+    }
+
+    .hero-visual {
+        position: relative;
+        display: grid;
+        min-height: 410px;
+        place-items: center;
+    }
+
+    .pizza-shadow {
+        position: absolute;
+        width: 360px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(35, 8, 8, .35);
+        filter: blur(18px);
+        transform: translateY(155px);
+    }
+
+    .pizza-art {
+        position: relative;
+        width: 330px;
+        height: 330px;
+        border-radius: 50%;
+        background: #d47b36;
+        box-shadow: inset 0 -14px 0 rgba(124, 50, 24, .3), 0 22px 0 #521017;
+        transform: rotate(-12deg);
+    }
+
+    .pizza-cheese {
+        position: absolute;
+        inset: 19px;
+        border-radius: 50%;
+        background: #f8c95f;
+        box-shadow: inset 0 0 0 5px #e79636;
+    }
+
+    .pizza-crust {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        border: 14px solid #e7a04a;
+        border-radius: 50%;
+    }
+
+    .topping {
+        position: absolute;
+        z-index: 2;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #b52d2d;
+        box-shadow: inset 5px 5px 0 rgba(255, 126, 83, .5);
+    }
+
+    .topping-one { top: 74px; left: 102px; }
+    .topping-two { top: 174px; left: 76px; }
+    .topping-three { top: 100px; right: 66px; }
+    .topping-four { right: 95px; bottom: 57px; }
+
+    .basil {
+        position: absolute;
+        z-index: 2;
+        color: #277344;
+        font-size: 2.1rem;
+        font-weight: 800;
+    }
+
+    .basil-one { top: 127px; left: 160px; }
+    .basil-two { right: 127px; bottom: 98px; }
+
+    .hero-sticker {
+        position: absolute;
+        right: 3%;
+        bottom: 5%;
+        display: grid;
+        width: 105px;
+        height: 105px;
+        place-items: center;
+        border-radius: 50%;
+        background: #f7c74c;
+        color: var(--pizzeria-ink);
+        font-size: .72rem;
+        font-weight: 900;
+        line-height: 1.15;
+        text-align: center;
+        transform: rotate(10deg);
+    }
+
+    .home-intro {
+        padding: 6rem 0;
+        background: #fffaf5;
+    }
+
+    .intro-heading {
+        max-width: 500px;
+        margin-bottom: 3rem;
+    }
+
+    .intro-heading h2,
+    .menu-banner h2 {
+        margin: 0;
+        font-family: Georgia, serif;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        letter-spacing: 0;
+    }
+
+    .quality-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+        border-top: 1px solid #e8cbc4;
+    }
+
+    .quality-item {
+        display: flex;
+        gap: 1.25rem;
+        padding: 2rem 2rem 0 0;
+        border-right: 1px solid #e8cbc4;
+    }
+
+    .quality-item:not(:first-child) {
+        padding-left: 2rem;
+    }
+
+    .quality-item:last-child {
+        border-right: 0;
+    }
+
+    .quality-number {
+        color: var(--pizzeria-red);
+        font-size: .8rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    .quality-item h3 {
+        margin: 0 0 .65rem;
+        font-size: 1.1rem;
+    }
+
+    .quality-item p {
+        margin: 0;
+        color: #765b57;
+        line-height: 1.6;
+    }
+
+    .menu-banner {
+        padding: 3.5rem 0;
+        background: var(--pizzeria-red);
+    }
+
+    .menu-banner-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+    }
+
+    @media (max-width: 767px) {
+        .home-hero {
+            padding: 4rem 0;
+        }
+
+        .hero-title {
+            font-size: 3.6rem;
+        }
+
+        .hero-actions,
+        .menu-banner-inner {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .hero-visual {
+            min-height: 330px;
+        }
+
+        .pizza-art {
+            width: 260px;
+            height: 260px;
+        }
+
+        .pizza-shadow {
+            width: 280px;
+            transform: translateY(125px);
+        }
+
+        .quality-list {
+            grid-template-columns: 1fr;
+        }
+
+        .quality-item,
+        .quality-item:not(:first-child) {
+            padding: 1.5rem 0;
+            border-right: 0;
+            border-bottom: 1px solid #e8cbc4;
+        }
+
+        .quality-item:last-child {
+            border-bottom: 0;
+        }
+    }
+
+    .home-hero-editorial {
+        padding: 4.5rem 0;
+        background: #fffaf5;
+        color: var(--pizzeria-ink);
+    }
+
+    .home-hero-editorial::after {
+        display: none;
+    }
+
+    .editorial-hero-grid {
+        display: grid;
+        grid-template-columns: .9fr 1.1fr;
+        align-items: center;
+        gap: 5rem;
+    }
+
+    .editorial-copy {
+        padding: 2rem 0;
+    }
+
+    .editorial-copy h1 {
+        max-width: 480px;
+        margin: 0;
+        color: var(--pizzeria-red-dark);
+        font-family: Georgia, serif;
+        font-size: clamp(3.4rem, 6vw, 6rem);
+        line-height: .95;
+        letter-spacing: 0;
+    }
+
+    .editorial-copy .hero-copy {
+        max-width: 380px;
+        color: #765b57;
+        font-size: 1.1rem;
+    }
+
+    .editorial-photo-wrap {
+        position: relative;
+        min-height: 480px;
+        padding: 1.2rem 1.2rem 3rem 3rem;
+        background: transparent;
+    }
+
+    .editorial-photo-wrap::before {
+        position: absolute;
+        z-index: 0;
+        top: 2.5rem;
+        right: 0;
+        bottom: 0;
+        left: 3rem;
+        border: 2px solid #d95d45;
+        border-radius: 1.5rem 1.5rem 8rem 1.5rem;
+        content: "";
+        transform: rotate(3deg);
+    }
+
+    .editorial-photo {
+        position: relative;
+        z-index: 1;
+        display: block;
+        width: 100%;
+        height: 440px;
+        border-radius: 1.5rem 1.5rem 8rem 1.5rem;
+        box-shadow: 0 18px 35px rgba(84, 30, 25, .18);
+        object-fit: cover;
+        object-position: center;
+        filter: saturate(1.1);
+    }
+
+    .editorial-note {
+        position: absolute;
+        bottom: 1rem;
+        left: 0;
+        display: grid;
+        width: 125px;
+        height: 125px;
+        place-items: center;
+        border-radius: 50%;
+        background: #f7c74c;
+        color: var(--pizzeria-ink);
+        font-size: .8rem;
+        font-weight: 800;
+        line-height: 1.2;
+        text-align: center;
+        text-transform: uppercase;
+        transform: rotate(-8deg);
+    }
+
+    .home-intro-editorial {
+        padding: 5.5rem 0;
+        background: #f5e8df;
+    }
+
+    .editorial-intro-heading h2 {
+        margin: 0;
+        color: var(--pizzeria-red-dark);
+        font-family: Georgia, serif;
+        font-size: clamp(2.5rem, 5vw, 4.5rem);
+        line-height: 1;
+        letter-spacing: 0;
+    }
+
+    .editorial-facts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        margin-top: 3.5rem;
+        border-top: 1px solid #d9b8ad;
+    }
+
+    .editorial-facts div {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.4rem 1rem 0 0;
+        border-right: 1px solid #d9b8ad;
+    }
+
+    .editorial-facts div:not(:first-child) {
+        padding-left: 1.5rem;
+    }
+
+    .editorial-facts div:last-child {
+        border-right: 0;
+    }
+
+    .editorial-facts strong {
+        color: var(--pizzeria-red);
+        font-size: .8rem;
+    }
+
+    .editorial-facts span {
+        font-weight: 600;
+    }
+
+    .menu-banner-editorial {
+        padding: 3rem 0;
+    }
+
+    .menu-banner-editorial h2 {
+        font-size: clamp(2rem, 4vw, 3rem);
+    }
+
+    @media (max-width: 767px) {
+        .editorial-hero-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .editorial-copy {
+            padding: 0;
+        }
+
+        .editorial-copy h1 {
+            font-size: 3.8rem;
+        }
+
+        .editorial-photo-wrap {
+            min-height: 330px;
+            padding: .8rem .8rem 2.3rem 1.5rem;
+        }
+
+        .editorial-photo-wrap::before {
+            top: 1.5rem;
+            left: 1.5rem;
+            border-radius: 1rem 1rem 5rem 1rem;
+        }
+
+        .editorial-photo {
+            height: 300px;
+            border-radius: 1rem 1rem 5rem 1rem;
+        }
+
+        .editorial-note {
+            width: 92px;
+            height: 92px;
+            font-size: .65rem;
+        }
+
+        .editorial-facts {
+            grid-template-columns: 1fr;
+        }
+
+        .editorial-facts div,
+        .editorial-facts div:not(:first-child) {
+            padding: 1rem 0;
+            border-right: 0;
+            border-bottom: 1px solid #d9b8ad;
+        }
+
+        .editorial-facts div:last-child {
+            border-bottom: 0;
+        }
+    }
+body {
+    background: #f5efe9;
+    color: #241915;
+}
+
+.pizzeria-navbar {
+    background: #111111;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(184, 18, 27, 0.4);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.pizzeria-logo,
+.pizzeria-navbar .nav-link,
+.cart-button {
+    color: #ffffff !important;
+}
+
+.pizzeria-logo small {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.pizzeria-navbar .nav-link::after {
+    background-color: #c83a2b;
+}
+
+.cart-button {
+    background: rgba(184, 18, 27, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    padding: 0.6rem 0.8rem;
+}
+
+.brand-hero {
+    padding: 4.5rem 0 3.5rem;
+    background: linear-gradient(180deg, #ffffff 0%, #f7f3f1 100%);
+    border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.brand-hero__inner {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: 4rem;
+}
+
+.eyebrow {
+    margin: 0 0 1rem;
+    color: #b8121b;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.18rem;
+    text-transform: uppercase;
+}
+
+.eyebrow--muted {
+    color: #5b4d48;
+}
+
+.eyebrow--light {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.brand-hero__content h1 {
+    margin: 0;
+    max-width: 560px;
+    color: #171412;
+    font-family: Georgia, serif;
+    font-size: clamp(4rem, 7vw, 6.4rem);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+}
+
+.brand-hero__content .lead {
+    max-width: 520px;
+    margin-top: 1.2rem;
+    color: #4d413e;
+    font-size: 1.2rem;
+    line-height: 1.7;
+}
+
+.hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.hero-actions .btn-primary {
+    background: #1f1714;
+    border-color: #1f1714;
+    border-radius: 999px;
+    box-shadow: 0 14px 30px rgba(31, 23, 20, 0.12);
+}
+
+.hero-actions .btn-primary:hover {
+    background: #2c201d;
+    border-color: #2c201d;
+}
+
+.hero-actions .btn-link {
+    color: #2a1d1b;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 2.3rem;
+}
+
+.hero-meta div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 110px;
+}
+
+.hero-meta strong {
+    color: #171412;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.hero-meta span {
+    color: #5b4d48;
+    font-size: 0.82rem;
+}
+
+.brand-hero__visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 520px;
+}
+
+.hero-plate {
+    position: relative;
+    width: min(100%, 430px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #f8efe7 0%, #f3e3d5 32%, #efe1d4 100%);
+    box-shadow: inset 0 0 0 14px rgba(255, 255, 255, 0.5), 0 30px 60px rgba(55, 31, 26, 0.12);
+    display: grid;
+    place-items: center;
+}
+
+.hero-pizza {
+    position: relative;
+    width: 72%;
+    height: 72%;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #d67a2d 0%, #be6328 100%);
+    box-shadow: inset 0 -16px 0 rgba(122, 48, 22, 0.2), 0 22px 30px rgba(127, 63, 26, 0.18);
+    transform: rotate(-10deg);
+}
+
+.pizza-base,
+.pizza-sauce,
+.pizza-cheese {
+    position: absolute;
+    inset: 14px;
+    border-radius: 50%;
+}
+
+.pizza-sauce {
+    inset: 12px;
+    background: rgba(161, 41, 31, 0.28);
+}
+
+.pizza-cheese {
+    inset: 24px;
+    background: linear-gradient(135deg, #f7dc7a 0%, #f3c864 100%);
+    box-shadow: inset 0 0 0 6px rgba(230, 159, 79, 0.5);
+}
+
+.topping {
+    position: absolute;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #ad2d2d;
+    box-shadow: inset 10px 5px 0 rgba(255, 135, 100, 0.3);
+}
+
+.topping--one { top: 62px; left: 56px; }
+.topping--two { top: 128px; right: 48px; }
+.topping--three { bottom: 66px; left: 82px; }
+.topping--four { bottom: 58px; right: 90px; }
+
+.basil {
+    position: absolute;
+    z-index: 3;
+    color: #2f7a48;
+    font-size: 1.9rem;
+    font-weight: 700;
+}
+
+.basil--one { top: 112px; left: 118px; }
+.basil--two { right: 118px; bottom: 104px; }
+
+.floating-card {
+    position: absolute;
+    right: 0;
+    bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(17, 17, 17, 0.08);
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
+}
+
+.floating-card span {
+    color: #6f544e;
+    font-size: 0.7rem;
+    letter-spacing: 0.12rem;
+    text-transform: uppercase;
+}
+
+.floating-card strong {
+    color: #171412;
+    font-size: 0.95rem;
+}
+
+.signature {
+    padding: 3.5rem 0 2rem;
+    background: #ffffff;
+}
+
+.section-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.section-head h2 {
+    margin: 0;
+    color: #171412;
+    font-family: Georgia, serif;
+    font-size: clamp(2.2rem, 4vw, 3.3rem);
+    line-height: 1;
+}
+
+.signature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.6rem;
+}
+
+.pizza-card {
+    min-height: 260px;
+    padding: 1.4rem 1.4rem 1.7rem;
+    border: 1px solid rgba(17, 17, 17, 0.08);
+    border-radius: 1.4rem;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.04);
+}
+
+.pizza-card--warm {
+    background: linear-gradient(180deg, #fff8f5 0%, #ffffff 100%);
+}
+
+.pizza-card--neutral {
+    background: linear-gradient(180deg, #f8f5f2 0%, #ffffff 100%);
+}
+
+.pizza-card--dark {
+    background: linear-gradient(180deg, #191212 0%, #0f0d0d 100%);
+    color: #f8f0ec;
+}
+
+.pizza-card__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.pizza-badge {
+    display: inline-flex;
+    padding: 0.42rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(184, 18, 27, 0.08);
+    color: #9d1a20;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.08rem;
+    text-transform: uppercase;
+}
+
+.pizza-card--dark .pizza-badge {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f7d7ca;
+}
+
+.pizza-price {
+    color: #171412;
+    font-weight: 800;
+}
+
+.pizza-card--dark .pizza-price {
+    color: #f8f0ec;
+}
+
+.pizza-card h3 {
+    margin: 0 0 0.75rem;
+    font-size: 2rem;
+    font-family: Georgia, serif;
+    letter-spacing: -0.04em;
+    color: #171412;
+}
+
+.pizza-card--dark h3 {
+    color: #f8f3ef;
+}
+
+.pizza-card p {
+    margin: 0;
+    color: #554543;
+    line-height: 1.7;
+}
+
+.pizza-card--dark p {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.ritual {
+    padding: 4rem 0 3rem;
+    background: #ffffff;
+}
+
+.ritual__inner {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 2rem;
+    align-items: stretch;
+}
+
+.ritual__text {
+    padding: 2rem 0;
+}
+
+.ritual__text h2 {
+    margin: 0;
+    color: #171412;
+    font-family: Georgia, serif;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: 1;
+}
+
+.ritual__text p {
+    max-width: 560px;
+    margin-top: 1.2rem;
+    color: #554543;
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.ritual__text ul {
+    margin: 1.7rem 0 0;
+    padding-left: 1.2rem;
+    color: #2a1e1b;
+    line-height: 2.2;
+}
+
+.ritual__panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ritual__panel-inner {
+    width: 100%;
+    min-height: 420px;
+    padding: 2rem;
+    border-radius: 2rem;
+    background: linear-gradient(180deg, #1d1716 0%, #2a201f 100%);
+    color: #f3e9e4;
+    box-shadow: 0 20px 40px rgba(28, 20, 18, 0.12);
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.ritual__label {
+    color: #d9b39c;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.15rem;
+    text-transform: uppercase;
+}
+
+.ritual__panel-inner strong {
+    margin-top: 1rem;
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1;
+}
+
+.ritual__panel-inner p {
+    margin-top: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.7;
+}
+
+.statement {
+    padding: 2rem 0 4rem;
+    background: #fffaf8;
+}
+
+.statement blockquote {
+    margin: 0;
+    color: #171412;
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 4vw, 4rem);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    text-align: center;
+}
+
+.cta-strip {
+    padding: 0 0 4rem;
+    background: #ffffff;
+}
+
+.cta-strip__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 2rem 2.2rem;
+    border-radius: 2rem;
+    background: linear-gradient(135deg, #171412 0%, #2d1817 100%);
+    color: #fff;
+    box-shadow: 0 20px 40px rgba(17, 17, 17, 0.12);
+}
+
+.cta-strip h3 {
+    margin: 0;
+    font-family: Georgia, serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    letter-spacing: -0.04em;
+}
+
+.btn-light {
+    border-radius: 999px;
+    font-weight: 700;
+    background: #ffffff;
+    color: #171412;
+}
+
+@media (max-width: 991px) {
+    .brand-hero__inner,
+    .ritual__inner,
+    .section-head,
+    .cta-strip__inner {
+        grid-template-columns: 1fr;
+        display: grid;
+    }
+
+    .section-head {
+        display: grid;
+        text-align: left;
+    }
+
+    .signature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .brand-hero__visual {
+        min-height: 420px;
+    }
+}
+
+@media (max-width: 767px) {
+    .brand-hero {
+        padding-top: 3rem;
+    }
+
+    .brand-hero__content h1 {
+        font-size: 3.5rem;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hero-meta {
+        gap: 1rem;
+    }
+
+    .brand-hero__visual {
+        min-height: 360px;
+    }
+
+    .floating-card {
+        right: 1rem;
+        bottom: 0.75rem;
+    }
+
+    .cta-strip__inner {
+        padding: 1.7rem 1.4rem;
     }
 }
