@@ -1,0 +1,61 @@
+@model ApiwebMVC.Models.MenuPizzaEditViewModel
+
+@{
+    ViewData["Title"] = "Editar pizza";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h2 class="mb-4">Editar pizza</h2>
+
+            <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                <input asp-for="Id" type="hidden" />
+                <input asp-for="Categoria" type="hidden" />
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Nombre" class="form-label"></label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Descripcion" class="form-label"></label>
+                    <textarea asp-for="Descripcion" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Descripcion" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Precio" class="form-label"></label>
+                    <input asp-for="Precio" asp-format="{0:0.##}" class="form-control" type="number" min="0.01" step="0.01" />
+                    <span asp-validation-for="Precio" class="text-danger"></span>
+                </div>
+
+                @if (!string.Equals(Model.Categoria, "Bebidas", StringComparison.OrdinalIgnoreCase))
+                {
+                    <div class="mb-3">
+                        <label asp-for="IngredientesTexto" class="form-label">Ingredientes</label>
+                        <textarea asp-for="IngredientesTexto" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="IngredientesTexto" class="text-danger"></span>
+                    </div>
+                }
+
+                <div class="mb-4">
+                    <label asp-for="ImagenURL" class="form-label">URL de la imagen</label>
+                    <input asp-for="ImagenURL" class="form-control" type="url" />
+                    <span asp-validation-for="ImagenURL" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

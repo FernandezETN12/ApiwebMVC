@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>ApiwebMVC-local-development-secrets</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

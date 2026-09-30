@@ -1,60 +1,58 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿:root {
+  --brand-color: #a51f28;
+  --brand-hover: #74161d;
+  --bg-main: #f8f9fa;
+  --text-dark: #212529;
 }
 
-a {
-  color: #a51f28;
+body {
+  background-color: var(--bg-main);
+  color: var(--text-dark);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.text-danger {
+  color: var(--brand-color) !important;
+}
+
+.uppercase-sub {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+}
+
+.navbar .nav-link {
+  color: #495057;
+  border-radius: 6px;
+  transition: all 0.15s ease-in-out;
+}
+
+.navbar .nav-link:hover {
+  color: var(--brand-color);
+  background-color: rgba(165, 31, 40, 0.06);
+}
+
+.btn-outline-danger {
+  color: var(--brand-color);
+  border-color: var(--brand-color);
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--brand-color);
+  border-color: var(--brand-color);
+  color: #ffffff;
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #a51f28;
-  border-color: #74161d;
+  background-color: var(--brand-color);
+  border-color: var(--brand-color);
 }
 
-.btn-primary:hover,
-.btn-primary:focus {
-  background-color: #74161d;
-  border-color: #74161d;
+.btn-primary:hover {
+  background-color: var(--brand-hover);
+  border-color: var(--brand-hover);
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #a51f28;
-  border-color: #74161d;
-}
-
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
-
-.footer {
-  width: 100%;
-  white-space: nowrap;
-  flex-shrink: 0;
-  line-height: 1.5;
-  padding: 1rem 0;
-  background-color: #74161d;
-  color: #fff3f1 !important;
-}
-
-.footer a {
-  color: #fff !important;
+footer {
+  font-size: 0.875rem;
 }

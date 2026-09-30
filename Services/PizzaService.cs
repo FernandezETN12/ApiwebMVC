@@ -39,6 +39,7 @@ public class PizzaService : IPizzaService
         existing.Descripcion = pizza.Descripcion;
         existing.Precio = pizza.Precio;
         existing.Ingredientes = pizza.Ingredientes;
+        existing.ImagenURL = pizza.ImagenURL;
         await _db.SaveChangesAsync();
         return true;
     }

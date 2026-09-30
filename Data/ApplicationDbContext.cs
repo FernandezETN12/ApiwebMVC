@@ -21,8 +21,9 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Pizza>()
             .Property(p => p.Ingredientes)
+            .IsRequired(false)
             .HasConversion(
-                v => System.Text.Json.JsonSerializer.Serialize(v),
-                v => System.Text.Json.JsonSerializer.Deserialize<List<string>>(v) ?? new List<string>());
+                v => v == null ? null : System.Text.Json.JsonSerializer.Serialize(v),
+                v => v == null ? null : System.Text.Json.JsonSerializer.Deserialize<List<string>>(v));
     }
 }
