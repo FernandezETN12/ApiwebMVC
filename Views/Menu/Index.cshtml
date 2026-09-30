@@ -33,7 +33,7 @@
                     @if (!string.IsNullOrWhiteSpace(pizza.ImagenURL))
                     {
                         <img src="@pizza.ImagenURL"
-                             class="card-img-top"
+                                class="card-img-top @(string.Equals(pizza.Categoria, "Bebidas", StringComparison.OrdinalIgnoreCase) ? "drink-img" : string.Empty)"
                              alt="@pizza.Nombre"
                              style="height: 220px; object-fit: cover;" />
                     }
