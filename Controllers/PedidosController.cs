@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiwebMVC.Data;
+using ApiwebMVC.Exceptions;
 using ApiwebMVC.Models;
 using ApiwebMVC.Models.DTOs;
 using ApiwebMVC.Services;
@@ -147,7 +148,7 @@ public class PedidosController : Controller
     {
         var pedido = await _pedidos.GetByIdAsync(id);
         if (pedido is null || !PuedeVerCliente(pedido.ClienteId))
-            return NotFound(new { mensaje = "Pedido no encontrado" });
+            throw new NotFoundException("Pedido no encontrado.");
 
         return Ok(pedido);
     }
@@ -155,8 +156,12 @@ public class PedidosController : Controller
     [Authorize]
     [HttpPost]
     [IgnoreAntiforgeryToken]
-    public async Task<ActionResult<Pedido>> CreatePedido([FromBody] CreatePedidoRequest request)
+    public async Task<ActionResult<Pedido>> CreatePedido([FromBody] CreatePedidoRequest? request)
     {
+        // JSON mal formado o con tipos incorrectos: respondemos 400 con el detalle, no un 500.
+        if (request is null || !ModelState.IsValid)
+            throw new ValidationException(ErroresDeModelo());
+
         // Un cliente solo puede crear pedidos a su nombre; el admin puede indicar cualquier cliente.
         if (!User.EsAdmin())
         {
@@ -210,10 +215,25 @@ public class PedidosController : Controller
     {
         var pedido = await _pedidos.GetByIdAsync(id);
         if (pedido is null || !PuedeVerCliente(pedido.ClienteId))
-            return NotFound(new { mensaje = "Pedido no encontrado" });
+            throw new NotFoundException("Pedido no encontrado.");
 
         await _pedidos.DeleteAsync(id);
         return NoContent();
+    }
+
+    private Dictionary<string, string[]> ErroresDeModelo()
+    {
+        var errores = ModelState
+            .Where(entry => entry.Value?.Errors.Count > 0)
+            .ToDictionary(
+                entry => string.IsNullOrEmpty(entry.Key) ? "body" : entry.Key,
+                entry => entry.Value!.Errors
+                    .Select(error => string.IsNullOrWhiteSpace(error.ErrorMessage) ? "El JSON enviado no es válido." : error.ErrorMessage)
+                    .ToArray());
+
+        if (errores.Count == 0)
+            errores["body"] = ["Falta el cuerpo JSON del pedido."];
+        return errores;
     }
 
     private bool PuedeVerCliente(int clienteId) =>

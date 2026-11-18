@@ -1212,3 +1212,124 @@ body {
         padding: 1.7rem 1.4rem;
     }
 }
+/* ---------- Login, perfil y "Mis pedidos" ---------- */
+.login-page {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 1rem;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 2.5rem 2rem;
+    background: #ffffff;
+    border: 1px solid #eee4dc;
+    border-radius: 18px;
+    box-shadow: 0 18px 40px rgba(23, 20, 18, 0.08);
+    text-align: center;
+}
+
+.login-card__brand {
+    font-size: 2.6rem;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+}
+
+.login-card h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.login-card__text {
+    color: #5b4d48;
+    margin-bottom: 1.5rem;
+}
+
+.login-card__back {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: var(--pizzeria-red);
+    text-decoration: none;
+}
+
+.google-login-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    background: #ffffff;
+    border: 1px solid #d6cdc6;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.google-login-button:hover {
+    background: var(--pizzeria-red-light);
+}
+
+.google-login-button__icon {
+    font-weight: 800;
+    color: #4285f4;
+}
+
+.profile-page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 1rem;
+}
+
+.profile-page h1 {
+    margin-bottom: 1.5rem;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.profile-card {
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid #eee4dc;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(23, 20, 18, 0.05);
+}
+
+.profile-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+}
+
+.profile-details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.4rem 1rem;
+    margin: 0;
+}
+
+.profile-details dt {
+    color: #5b4d48;
+    font-weight: 600;
+}
+
+.profile-details dd {
+    margin: 0;
+}
+
+.profile-orders {
+    display: grid;
+    gap: 0.6rem;
+}
+
+.profile-order {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #f1e9e3;
+}
