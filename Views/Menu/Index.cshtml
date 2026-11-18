@@ -65,12 +65,15 @@
                             </strong>
 
                             <div class="d-flex gap-2">
-                                <a class="btn btn-sm btn-outline-secondary"
-                                   asp-controller="Menu"
-                                   asp-action="Edit"
-                                   asp-route-id="@pizza.Id">
-                                    Editar
-                                </a>
+                                @if (User.EsAdmin())
+                                {
+                                    <a class="btn btn-sm btn-outline-secondary"
+                                       asp-controller="Menu"
+                                       asp-action="Edit"
+                                       asp-route-id="@pizza.Id">
+                                        Editar
+                                    </a>
+                                }
 
                                 <form asp-controller="Menu" asp-action="Add" method="post"
                                       class="js-add-to-cart" data-product-name="@pizza.Nombre">

@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ApiwebMVC.Models;
 
 public enum EstadoPedido
@@ -15,6 +17,7 @@ public class Pedido
     public Cliente? Cliente { get; set; }
     public List<PedidoDetalle> Detalles { get; set; } = new();
     public EstadoPedido Estado { get; set; } = EstadoPedido.EsperaDeConfirmacion;
+    [Column(TypeName = "decimal(18,2)")]
     public decimal Total { get; set; }
     public DateTime FechaPedido { get; set; } = DateTime.UtcNow;
     public DateTime? FechaConfirmacion { get; set; }
@@ -31,5 +34,6 @@ public class PedidoDetalle
     public int PizzaId { get; set; }
     public Pizza? Pizza { get; set; }
     public int Cantidad { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
     public decimal PrecioUnitario { get; set; }
 }

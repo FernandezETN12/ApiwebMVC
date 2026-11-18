@@ -1,0 +1,85 @@
+@model IReadOnlyCollection<ApiwebMVC.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Panel de pedidos";
+    var estadoFiltro = ViewBag.Estado as EstadoPedido?;
+}
+
+<div class="container py-4">
+    <p class="eyebrow eyebrow-dark">Administración</p>
+    <h1 class="h2 mb-3">Panel de pedidos</h1>
+
+    @if (TempData["SuccessMessage"] is string ok)
+    {
+        <div class="alert alert-success" role="status">@ok</div>
+    }
+    @if (TempData["ErrorMessage"] is string error)
+    {
+        <div class="alert alert-danger" role="alert">@error</div>
+    }
+
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <a class="btn btn-sm @(estadoFiltro is null ? "btn-dark" : "btn-outline-dark")" asp-action="Index">Todos</a>
+        @foreach (var estado in Enum.GetValues<EstadoPedido>())
+        {
+            <a class="btn btn-sm @(estadoFiltro == estado ? "btn-dark" : "btn-outline-dark")"
+               asp-action="Index" asp-route-estado="@estado">@EstadoTexto.De(estado)</a>
+        }
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <p>No hay pedidos para mostrar.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Productos</th>
+                        <th class="text-end">Total</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var pedido in Model)
+                    {
+                        var accion = EstadoTexto.SiguienteAccion(pedido.Estado);
+                        <tr>
+                            <td><strong>@pedido.Id</strong></td>
+                            <td class="small">@pedido.FechaPedido.ToLocalTime().ToString("dd/MM HH:mm")</td>
+                            <td class="small">
+                                <strong>@pedido.Cliente?.Nombre</strong><br />
+                                @pedido.Cliente?.Telefono<br />
+                                @pedido.Cliente?.Direccion
+                            </td>
+                            <td class="small">
+                                @foreach (var detalle in pedido.Detalles)
+                                {
+                                    <div>@detalle.Cantidad × @(detalle.Pizza?.Nombre ?? $"Producto {detalle.PizzaId}")</div>
+                                }
+                            </td>
+                            <td class="text-end">$@pedido.Total.ToString("N0")</td>
+                            <td><span class="badge @EstadoTexto.Badge(pedido.Estado)">@EstadoTexto.De(pedido.Estado)</span></td>
+                            <td class="text-end">
+                                @if (accion is not null)
+                                {
+                                    <form asp-action="AvanzarEstado" method="post">
+                                        <input type="hidden" name="id" value="@pedido.Id" />
+                                        <input type="hidden" name="estadoActual" value="@pedido.Estado" />
+                                        <button type="submit" class="btn btn-sm btn-primary">@accion</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

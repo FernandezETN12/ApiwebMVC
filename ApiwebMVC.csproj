@@ -18,7 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="ApiwebMVC.Tests/**/*.cs" />
+    <!-- El proyecto de tests vive dentro de esta carpeta: lo excluimos por completo de la web -->
+    <Compile Remove="ApiwebMVC.Tests/**" />
+    <Content Remove="ApiwebMVC.Tests/**" />
+    <None Remove="ApiwebMVC.Tests/**" />
+    <EmbeddedResource Remove="ApiwebMVC.Tests/**" />
   </ItemGroup>
 
 </Project>

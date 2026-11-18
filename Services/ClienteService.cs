@@ -13,6 +13,9 @@ public sealed class ClienteService : IClienteService
         _db = db;
     }
 
+    public async Task<Cliente?> GetByIdAsync(int id) =>
+        await _db.Clientes.FindAsync(id);
+
     public async Task<Cliente?> GetByGoogleSubjectAsync(string googleSubject) =>
         await _db.Clientes.FirstOrDefaultAsync(c => c.GoogleSubject == googleSubject);
 
@@ -48,5 +51,14 @@ public sealed class ClienteService : IClienteService
 
         await _db.SaveChangesAsync();
         return cliente;
+    }
+
+    public async Task ActualizarContactoAsync(int clienteId, string telefono, string direccion)
+    {
+        var cliente = await _db.Clientes.FindAsync(clienteId)
+            ?? throw new Exceptions.NotFoundException("El cliente indicado no existe.");
+        cliente.Telefono = telefono;
+        cliente.Direccion = direccion;
+        await _db.SaveChangesAsync();
     }
 }

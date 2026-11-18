@@ -30,7 +30,16 @@ builder.Services.AddAuthentication(options =>
 {
     options.LoginPath = "/Account/Login";
     options.LogoutPath = "/Account/Logout";
-    options.AccessDeniedPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+
+    // La API responde 401/403 en JSON en vez de redirigir a la página de login.
+    options.Events.OnRedirectToLogin = context => RespondApiOrRedirect(context, StatusCodes.Status401Unauthorized);
+    options.Events.OnRedirectToAccessDenied = context => RespondApiOrRedirect(context, StatusCodes.Status403Forbidden);
+})
+// Cookie temporal donde Google deja la identidad antes de que creemos la sesión propia.
+.AddCookie(ApiwebMVC.Controllers.AccountController.ExternalScheme, options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 });
 
 var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
@@ -43,12 +52,21 @@ if (!string.IsNullOrWhiteSpace(googleClientId) && !string.IsNullOrWhiteSpace(goo
         {
             options.ClientId = googleClientId;
             options.ClientSecret = googleClientSecret;
+            options.SignInScheme = ApiwebMVC.Controllers.AccountController.ExternalScheme;
             options.SaveTokens = true;
             options.CallbackPath = "/signin-google";
         });
 }
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(ApiwebMVC.Models.Roles.Admin, policy => policy.RequireRole(ApiwebMVC.Models.Roles.Admin));
+});
+
+builder.Services.AddControllersWithViews()
+    // El estado del pedido viaja en el JSON como texto ("EnPreparacion") en vez de número.
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -60,6 +78,7 @@ builder.Services.AddSession(options =>
 builder.Services.AddScoped<ApiwebMVC.Services.IPizzaService, ApiwebMVC.Services.PizzaService>();
 builder.Services.AddScoped<ApiwebMVC.Services.IPedidoService, ApiwebMVC.Services.PedidoService>();
 builder.Services.AddScoped<ApiwebMVC.Services.IClienteService, ApiwebMVC.Services.ClienteService>();
+builder.Services.AddSingleton<ApiwebMVC.Services.IAdminService, ApiwebMVC.Services.AdminService>();
 builder.Services.AddExceptionHandler<ApiwebMVC.Middleware.GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options =>
@@ -113,3 +132,21 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
+
+static Task RespondApiOrRedirect(Microsoft.AspNetCore.Authentication.RedirectContext<CookieAuthenticationOptions> context, int statusCode)
+{
+    if (context.Request.Path.StartsWithSegments("/api"))
+    {
+        context.Response.StatusCode = statusCode;
+        return context.Response.WriteAsJsonAsync(new
+        {
+            status = statusCode,
+            title = statusCode == StatusCodes.Status401Unauthorized
+                ? "Tenés que iniciar sesión."
+                : "No tenés permisos para esta acción."
+        });
+    }
+
+    context.Response.Redirect(context.RedirectUri);
+    return Task.CompletedTask;
+}

@@ -1,5 +1,11 @@
 @host = http://localhost:5046
 
+# La API usa la misma cookie de sesión que la web.
+# GET /api/pizzas es público. Para el resto, iniciá sesión en el navegador y copiá
+# la cookie ".AspNetCore.Cookies" en la variable de abajo.
+# Cliente: crea pedidos a su nombre y ve los suyos. Admin: todo lo demás.
+@cookie = .AspNetCore.Cookies=PEGAR_AQUI
+
 ### Listar pizzas
 GET {{host}}/api/pizzas
 
@@ -8,6 +14,7 @@ GET {{host}}/api/pizzas/999999
 
 ### Crear pedido válido
 POST {{host}}/api/pedidos
+Cookie: {{cookie}}
 Content-Type: application/json
 
 {
@@ -20,6 +27,7 @@ Content-Type: application/json
 
 ### Crear pedido inválido (400)
 POST {{host}}/api/pedidos
+Cookie: {{cookie}}
 Content-Type: application/json
 
 {
@@ -29,3 +37,12 @@ Content-Type: application/json
 
 ### Pedido inexistente (404)
 GET {{host}}/api/pedidos/999999
+Cookie: {{cookie}}
+
+### Confirmar pedido (solo admin)
+PUT {{host}}/api/pedidos/1/confirmar
+Cookie: {{cookie}}
+
+### Pedidos por estado (solo admin)
+GET {{host}}/api/pedidos/estado/EsperaDeConfirmacion
+Cookie: {{cookie}}

@@ -4,20 +4,35 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using ApiwebMVC.Models;
 using ApiwebMVC.Services;
 
 namespace ApiwebMVC.Controllers;
 
 public sealed class AccountController : Controller
 {
+    public const string ExternalScheme = "External";
+
     private readonly IConfiguration _configuration;
     private readonly IClienteService _clienteService;
+    private readonly IAdminService _adminService;
+    private readonly IWebHostEnvironment _environment;
 
-    public AccountController(IConfiguration configuration, IClienteService clienteService)
+    public AccountController(
+        IConfiguration configuration,
+        IClienteService clienteService,
+        IAdminService adminService,
+        IWebHostEnvironment environment)
     {
         _configuration = configuration;
         _clienteService = clienteService;
+        _adminService = adminService;
+        _environment = environment;
     }
+
+    private bool GoogleConfigured =>
+        !string.IsNullOrWhiteSpace(_configuration["Authentication:Google:ClientId"]) &&
+        !string.IsNullOrWhiteSpace(_configuration["Authentication:Google:ClientSecret"]);
 
     [AllowAnonymous]
     [HttpGet]
@@ -27,9 +42,8 @@ public sealed class AccountController : Controller
             return RedirectToLocal(returnUrl);
 
         ViewData["ReturnUrl"] = returnUrl;
-        ViewData["GoogleConfigured"] =
-            !string.IsNullOrWhiteSpace(_configuration["Authentication:Google:ClientId"]) &&
-            !string.IsNullOrWhiteSpace(_configuration["Authentication:Google:ClientSecret"]);
+        ViewData["GoogleConfigured"] = GoogleConfigured;
+        ViewData["DevLoginEnabled"] = _environment.IsDevelopment();
         return View();
     }
 
@@ -38,9 +52,7 @@ public sealed class AccountController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult ChallengeGoogle(string? returnUrl = null)
     {
-        var clientId = _configuration["Authentication:Google:ClientId"];
-        var clientSecret = _configuration["Authentication:Google:ClientSecret"];
-        if (string.IsNullOrWhiteSpace(clientId) || string.IsNullOrWhiteSpace(clientSecret))
+        if (!GoogleConfigured)
             return RedirectToAction(nameof(Login));
 
         var properties = new AuthenticationProperties
@@ -55,7 +67,9 @@ public sealed class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> GoogleCallback(string? returnUrl = null)
     {
-        var googleResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+        // Google deja su identidad en una cookie temporal ("External"); la leemos y la borramos.
+        var googleResult = await HttpContext.AuthenticateAsync(ExternalScheme);
+        await HttpContext.SignOutAsync(ExternalScheme);
         if (!googleResult.Succeeded || googleResult.Principal is null)
             return RedirectToAction(nameof(Login));
 
@@ -67,28 +81,31 @@ public sealed class AccountController : Controller
         if (string.IsNullOrWhiteSpace(email))
             return RedirectToAction(nameof(Login));
 
-        var cliente = await _clienteService.CreateOrUpdateFromGoogleAsync(googleSubject, name, email);
+        await SignInClienteAsync(googleSubject, name, email);
+        return RedirectToLocal(returnUrl);
+    }
 
-        var claims = new List<Claim>
+    /// <summary>
+    /// Login de prueba SOLO para desarrollo: permite entrar con cualquier email sin Google
+    /// para probar los roles de cliente y admin. En producción devuelve 404.
+    /// </summary>
+    [AllowAnonymous]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DevLogin(string email, string? nombre, string? returnUrl = null)
+    {
+        if (!_environment.IsDevelopment())
+            return NotFound();
+
+        email = email?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(email) || !email.Contains('@'))
         {
-            new(ClaimTypes.NameIdentifier, googleSubject),
-            new(ClaimTypes.Name, name),
-            new(ClaimTypes.Email, email),
-            new("ClienteId", cliente.Id.ToString())
-        };
+            TempData["LoginError"] = "Ingresá un email válido.";
+            return RedirectToAction(nameof(Login), new { returnUrl });
+        }
 
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var localPrincipal = new ClaimsPrincipal(identity);
-
-        await HttpContext.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            localPrincipal,
-            new AuthenticationProperties
-            {
-                IsPersistent = true,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(30)
-            });
-
+        var displayName = string.IsNullOrWhiteSpace(nombre) ? email.Split('@')[0] : nombre.Trim();
+        await SignInClienteAsync($"dev:{email.ToLowerInvariant()}", displayName, email);
         return RedirectToLocal(returnUrl);
     }
 
@@ -101,19 +118,49 @@ public sealed class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+    [AllowAnonymous]
+    [HttpGet]
+    public IActionResult AccessDenied() => View();
+
     [Authorize]
     [HttpGet]
     public async Task<IActionResult> Perfil([FromServices] IPedidoService pedidoService)
     {
-        var clienteIdClaim = User.FindFirst("ClienteId")?.Value;
-        if (!int.TryParse(clienteIdClaim, out var clienteId))
+        var clienteId = User.GetClienteId();
+        if (clienteId is null)
             return RedirectToAction(nameof(Login));
 
-        var pedidos = await pedidoService.GetByClienteAsync(clienteId);
+        var pedidos = await pedidoService.GetByClienteAsync(clienteId.Value);
         ViewBag.Nombre = User.Identity?.Name;
         ViewBag.Email = User.FindFirst(ClaimTypes.Email)?.Value;
         ViewBag.ClienteId = clienteId;
+        ViewBag.Rol = User.EsAdmin() ? Roles.Admin : Roles.Cliente;
         return View(pedidos);
+    }
+
+    private async Task SignInClienteAsync(string subject, string name, string email)
+    {
+        var cliente = await _clienteService.CreateOrUpdateFromGoogleAsync(subject, name, email);
+        var rol = _adminService.EsAdmin(email) ? Roles.Admin : Roles.Cliente;
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, subject),
+            new(ClaimTypes.Name, name),
+            new(ClaimTypes.Email, email),
+            new(ClaimTypes.Role, rol),
+            new(ClaimsPrincipalExtensions.ClienteIdClaim, cliente.Id.ToString())
+        };
+
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(identity),
+            new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(30)
+            });
     }
 
     private IActionResult RedirectToLocal(string? returnUrl)

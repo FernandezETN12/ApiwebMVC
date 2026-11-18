@@ -18,6 +18,8 @@
                 <dd>@ViewBag.Email</dd>
                 <dt>Cliente</dt>
                 <dd>#@ViewBag.ClienteId</dd>
+                <dt>Rol</dt>
+                <dd>@ViewBag.Rol</dd>
             </dl>
         </article>
 
@@ -35,8 +37,8 @@
                     {
                         <div class="profile-order">
                             <strong>Pedido #@pedido.Id</strong>
-                            <span>@pedido.Estado</span>
-                            <span>$@pedido.Total.ToString("N2")</span>
+                            <span class="badge @EstadoTexto.Badge(pedido.Estado)">@EstadoTexto.De(pedido.Estado)</span>
+                            <span>$@pedido.Total.ToString("N0")</span>
                         </div>
                     }
                 </div>
