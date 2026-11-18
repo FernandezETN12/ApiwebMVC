@@ -61,10 +61,17 @@
 
 				const responseHtml = await response.text();
 				const responseDocument = new DOMParser().parseFromString(responseHtml, "text/html");
-				const updatedCount = responseDocument.querySelector("#cart-count")?.textContent?.trim();
-				const cartCount = document.querySelector("#cart-count");
-				if (cartCount && updatedCount !== undefined) {
-					cartCount.textContent = updatedCount;
+				const updatedSummaryCount = responseDocument.querySelector("#cart-summary-count")?.textContent?.trim();
+				const updatedSummaryTotal = responseDocument.querySelector("#cart-summary-total")?.textContent?.trim();
+
+				const summaryCount = document.querySelector("#cart-summary-count");
+				const summaryTotal = document.querySelector("#cart-summary-total");
+				const cartSummary = document.querySelector(".cart-summary");
+
+				if (summaryCount && updatedSummaryCount !== undefined) summaryCount.textContent = updatedSummaryCount;
+				if (summaryTotal && updatedSummaryTotal !== undefined) summaryTotal.textContent = updatedSummaryTotal;
+				if (cartSummary && updatedSummaryCount !== undefined) {
+					cartSummary.hidden = Number(updatedSummaryCount) === 0;
 				}
 
 				showToast(`${form.dataset.productName} agregado al pedido.`);

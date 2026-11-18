@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@inject ApiwebMVC.Services.IPizzaService PizzaService
+@{
+    var carrito = CarritoSession.Get(Context);
+    var productos = await PizzaService.GetAllAsync();
+    var carritoCantidad = carrito.Values.Sum();
+    var carritoTotal = productos
+        .Where(pizza => carrito.ContainsKey(pizza.Id))
+        .Sum(pizza => pizza.Precio * carrito[pizza.Id]);
+}
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -63,17 +72,8 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Pedidos" asp-action="Index">
-                                Mi pedido
-                            </a>
-                        </li>
-
                         @if (User.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="PedidosPage" asp-action="Index">Mis pedidos</a>
-                            </li>
                             @if (User.EsAdmin())
                             {
                                 <li class="nav-item">
@@ -99,11 +99,6 @@
 
                     </ul>
 
-                    <a class="cart-button" asp-controller="Pedidos" asp-action="Index" aria-label="Abrir mi pedido">
-                        🛒
-                        <span id="cart-count">@CarritoSession.Get(Context).Values.Sum()</span>
-                    </a>
-
                 </div>
 
             </div>
@@ -115,6 +110,14 @@
             @RenderBody()
         </main>
     </div>
+
+    <a class="cart-summary" asp-controller="Pedidos" asp-action="Index" aria-label="Ver carrito" hidden="@(carritoCantidad == 0)">
+        <span class="cart-summary__icon">🛒</span>
+        <span class="cart-summary__copy">
+            <strong id="cart-summary-count">@carritoCantidad</strong>
+            <span>productos · <b id="cart-summary-total">$@carritoTotal.ToString("N0")</b></span>
+        </span>
+    </a>
 
     <footer class="border-top footer text-muted mt-auto">
         <div class="container">
