@@ -1,0 +1,31 @@
+@host = http://localhost:5046
+
+### Listar pizzas
+GET {{host}}/api/pizzas
+
+### Obtener pizza inexistente (404)
+GET {{host}}/api/pizzas/999999
+
+### Crear pedido válido
+POST {{host}}/api/pedidos
+Content-Type: application/json
+
+{
+  "clienteId": 1,
+  "detalles": [
+    { "pizzaId": 1, "cantidad": 2 }
+  ],
+  "notasDelivery": "Timbre 3B"
+}
+
+### Crear pedido inválido (400)
+POST {{host}}/api/pedidos
+Content-Type: application/json
+
+{
+  "clienteId": 0,
+  "detalles": []
+}
+
+### Pedido inexistente (404)
+GET {{host}}/api/pedidos/999999

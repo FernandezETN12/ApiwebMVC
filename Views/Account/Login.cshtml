@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Iniciar sesión";
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+
+<div class="login-page">
+    <section class="login-card">
+        <div class="login-card__brand">🍕</div>
+        <p class="eyebrow eyebrow-dark">Pizzería</p>
+        <h1>Iniciar sesión</h1>
+        <p class="login-card__text">Iniciá sesión para consultar tus pedidos y guardar tu perfil.</p>
+
+        @if (ViewData["GoogleConfigured"] is true)
+        {
+            <form asp-controller="Account" asp-action="ChallengeGoogle" asp-route-returnUrl="@returnUrl" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="google-login-button">
+                    <span class="google-login-button__icon" aria-hidden="true">G</span>
+                    Continuar con Google
+                </button>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-warning mt-3" role="alert">
+                Google Authentication aún no está configurado. Consulta los secretos locales antes de habilitarlo.
+            </div>
+        }
+
+        <a class="login-card__back" asp-controller="Home" asp-action="Index">← Volver al sitio</a>
+    </section>
+</div>

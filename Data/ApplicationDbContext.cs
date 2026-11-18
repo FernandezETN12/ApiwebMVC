@@ -24,6 +24,19 @@ public class ApplicationDbContext : DbContext
             .IsRequired(false)
             .HasConversion(
                 v => v == null ? null : System.Text.Json.JsonSerializer.Serialize(v),
-                v => v == null ? null : System.Text.Json.JsonSerializer.Deserialize<List<string>>(v));
+                v => v == null ? null : System.Text.Json.JsonSerializer.Deserialize<List<string>>(v))
+            .Metadata.SetValueComparer(
+                new Microsoft.EntityFrameworkCore.ChangeTracking.ValueComparer<List<string>>(
+                    (left, right) => ReferenceEquals(left, right) || (left != null && right != null && left.SequenceEqual(right)),
+                    value => value == null ? 0 : value.Aggregate(0, (hash, item) => HashCode.Combine(hash, item.GetHashCode())),
+                    value => value == null ? null! : value.ToList()));
+
+        modelBuilder.Entity<Cliente>()
+            .HasIndex(c => c.Email)
+            .IsUnique();
+
+        modelBuilder.Entity<Cliente>()
+            .HasIndex(c => c.GoogleSubject)
+            .IsUnique();
     }
 }

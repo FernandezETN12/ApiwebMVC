@@ -98,4 +98,23 @@
 		});
 		heroPlate.replaceWith(pizzaPhoto);
 	}
+
+	const pizzaModal = document.getElementById('pizzaModal');
+	if (pizzaModal) {
+		pizzaModal.addEventListener('show.bs.modal', (event) => {
+			const card = event.relatedTarget;
+			if (!card?.dataset) return;
+			const ingredients = (card.dataset.pizzaIngredients || '').split('|').filter(Boolean);
+			document.getElementById('pizzaModalTitle').textContent = card.dataset.pizzaName || '';
+			document.getElementById('pizzaModalDescription').textContent = card.dataset.pizzaDescription || '';
+			document.getElementById('pizzaModalImage').style.backgroundImage = `url('${card.dataset.pizzaImage || ''}')`;
+			document.getElementById('pizzaModalIngredients').replaceChildren(
+				...ingredients.map((ingredient) => {
+					const tag = document.createElement('span');
+					tag.textContent = ingredient;
+					return tag;
+				})
+			);
+		});
+	}
 });

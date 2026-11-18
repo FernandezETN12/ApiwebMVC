@@ -1,0 +1,46 @@
+@model IReadOnlyCollection<ApiwebMVC.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Mi perfil";
+}
+
+<section class="profile-page">
+    <p class="eyebrow eyebrow-dark">Mi cuenta</p>
+    <h1>Hola, @ViewBag.Nombre</h1>
+
+    <div class="profile-grid">
+        <article class="profile-card">
+            <h2>Datos personales</h2>
+            <dl class="profile-details">
+                <dt>Nombre</dt>
+                <dd>@ViewBag.Nombre</dd>
+                <dt>Correo</dt>
+                <dd>@ViewBag.Email</dd>
+                <dt>Cliente</dt>
+                <dd>#@ViewBag.ClienteId</dd>
+            </dl>
+        </article>
+
+        <article class="profile-card">
+            <h2>Mis pedidos</h2>
+            @if (Model.Count == 0)
+            {
+                <p>Aún no realizaste pedidos.</p>
+                <a class="btn btn-primary" asp-controller="Menu" asp-action="Index">Ver el menú</a>
+            }
+            else
+            {
+                <div class="profile-orders">
+                    @foreach (var pedido in Model)
+                    {
+                        <div class="profile-order">
+                            <strong>Pedido #@pedido.Id</strong>
+                            <span>@pedido.Estado</span>
+                            <span>$@pedido.Total.ToString("N2")</span>
+                        </div>
+                    }
+                </div>
+            }
+        </article>
+    </div>
+</section>
