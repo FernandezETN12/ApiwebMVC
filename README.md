@@ -64,3 +64,39 @@ Al correr en modo Development, la página de login muestra **"Entrar como prueba
 ```bash
 dotnet test ApiwebMVC.Tests
 ```
+
+## Fotos de los productos
+
+El menú muestra cada foto **completa**, sin recortes. Si un producto no tiene foto, o la foto no carga, aparece un reemplazo con su ícono y su nombre.
+
+Para usar fotos propias en buena calidad, que además funcionan sin internet:
+
+1. Guardá la foto en `wwwroot/img/productos/` con el nombre de la tabla (también sirven `.jpeg`, `.png` o `.webp`).
+2. Reiniciá la app (`dotnet run`): al arrancar asigna sola la foto a su producto. La foto local tiene prioridad sobre una dirección web.
+
+Recomendado: fotos cuadradas o 4:3, de 800 a 1200 px de ancho y menos de 300 KB.
+
+| Producto | Categoría | Nombre del archivo |
+|---|---|---|
+| Muzzarella | Pizzas | `muzzarella.jpg` |
+| Napolitana | Pizzas | `napolitana.jpg` |
+| Jamón y Morrones | Pizzas | `jamon-y-morrones.jpg` |
+| Fugazzeta | Pizzas | `fugazzeta.jpg` |
+| Calabresa | Pizzas | `calabresa.jpg` |
+| Tomate con Albahaca | Pizzas | `tomate-con-albahaca.jpg` |
+| Margherita | Pizzas | `margherita.jpg` |
+| Rúcula & Parmesano | Pizzas | `rucula-parmesano.jpg` |
+| Diavola | Pizzas | `diavola.jpg` |
+| Empanada de Carne | Empanadas | `empanada-de-carne.jpg` |
+| Empanada de Jamón y Queso | Empanadas | `empanada-de-jamon-y-queso.jpg` |
+| Empanada de Pollo | Empanadas | `empanada-de-pollo.jpg` |
+| Empanada de Humita | Empanadas | `empanada-de-humita.jpg` |
+| Empanada de Papa | Empanadas | `empanada-de-papa.jpg` |
+| Empanada de Verdura | Empanadas | `empanada-de-verdura.jpg` |
+| Coca-Cola | Bebidas | `coca-cola.jpg` |
+| Sprite | Bebidas | `sprite.jpg` |
+| Pepsi | Bebidas | `pepsi.jpg` |
+| Agua | Bebidas | `agua.jpg` |
+| Paso de los Toros | Bebidas | `paso-de-los-toros.jpg` |
+| Agua con gas | Bebidas | `agua-con-gas.jpg` |
+

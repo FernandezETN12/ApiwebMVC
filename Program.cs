@@ -109,6 +109,7 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     await dbContext.Database.MigrateAsync();
     await PizzaSeeder.SeedAsync(dbContext);
+    await PizzaSeeder.AsignarFotosLocalesAsync(dbContext, app.Environment.WebRootPath);
 }
 
 // Configure the HTTP request pipeline.

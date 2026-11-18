@@ -42,9 +42,19 @@
                 }
 
                 <div class="mb-4">
-                    <label asp-for="ImagenURL" class="form-label">URL de la imagen</label>
-                    <input asp-for="ImagenURL" class="form-control" type="url" />
+                    <label asp-for="ImagenURL" class="form-label">Imagen</label>
+                    <input asp-for="ImagenURL" class="form-control" type="text" placeholder="https://… o /img/productos/archivo.jpg" />
+                    <div class="form-text">
+                        Pegá una dirección web, o guardá la foto en <code>wwwroot/img/productos/@(ApiwebMVC.Services.FotosProductos.NombreArchivo(Model.Nombre)).jpg</code>:
+                        la app la usa sola al arrancar.
+                    </div>
                     <span asp-validation-for="ImagenURL" class="text-danger"></span>
+                    @if (!string.IsNullOrWhiteSpace(Model.ImagenURL))
+                    {
+                        <div class="product-media product-media--preview mt-3">
+                            <img src="@Model.ImagenURL" alt="Vista previa de @Model.Nombre" class="product-img" />
+                        </div>
+                    }
                 </div>
 
                 <div class="d-flex gap-2">

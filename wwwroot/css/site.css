@@ -1404,3 +1404,58 @@ body {
     margin: 0;
     padding-left: 1.2rem;
 }
+
+/* ---------- Fotos de productos: siempre completas ---------- */
+.product-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--pizzeria-red-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product-media--preview {
+    max-width: 320px;
+    border: 1px solid #eee4dc;
+    border-radius: 12px;
+}
+
+/* contain: la foto entra entera en el recuadro, sin recortar bordes */
+.product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 0.5rem;
+}
+
+.product-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #fff7f3 0%, #f6e7dc 100%);
+    color: var(--pizzeria-red-dark);
+    text-align: center;
+    padding: 1rem;
+}
+
+.product-placeholder[hidden] {
+    display: none;
+}
+
+.product-placeholder__icon {
+    font-size: 4rem;
+    line-height: 1;
+}
+
+.product-placeholder__name {
+    font-family: Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+}

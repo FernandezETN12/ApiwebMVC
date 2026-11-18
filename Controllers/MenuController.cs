@@ -90,7 +90,7 @@ public class MenuController : Controller
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList(),
             Categoria = model.Categoria,
-            ImagenURL = model.ImagenURL
+            ImagenURL = model.ImagenURL?.Trim() ?? string.Empty
         };
 
         if (!await _pizzas.UpdateAsync(id, pizza))

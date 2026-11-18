@@ -215,4 +215,28 @@ public static class PizzaSeeder
         await context.Pizzas.AddRangeAsync(missingPizzas);
         await context.SaveChangesAsync();
     }
+
+    /// <summary>
+    /// Si en wwwroot/img/productos hay una foto con el nombre del producto, la usa.
+    /// La foto local tiene prioridad sobre una URL externa: no depende de internet.
+    /// </summary>
+    public static async Task AsignarFotosLocalesAsync(ApplicationDbContext context, string webRootPath)
+    {
+        if (string.IsNullOrWhiteSpace(webRootPath)) return;
+
+        var productos = await context.Pizzas.ToListAsync();
+        var cambios = 0;
+        foreach (var producto in productos)
+        {
+            var fotoLocal = ApiwebMVC.Services.FotosProductos.BuscarFotoLocal(webRootPath, producto.Nombre);
+            if (fotoLocal is not null && producto.ImagenURL != fotoLocal)
+            {
+                producto.ImagenURL = fotoLocal;
+                cambios++;
+            }
+        }
+
+        if (cambios > 0)
+            await context.SaveChangesAsync();
+    }
 }

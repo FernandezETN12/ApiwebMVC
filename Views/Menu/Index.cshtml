@@ -30,13 +30,27 @@
             <div class="col-sm-6 col-lg-4 mb-4">
                 <div class="card h-100 shadow-sm">
 
-                    @if (!string.IsNullOrWhiteSpace(pizza.ImagenURL))
-                    {
-                        <img src="@pizza.ImagenURL"
-                                class="card-img-top @(string.Equals(pizza.Categoria, "Bebidas", StringComparison.OrdinalIgnoreCase) ? "drink-img" : string.Empty)"
-                             alt="@pizza.Nombre"
-                             style="height: 220px; object-fit: cover;" />
+                    @{
+                        var icono = pizza.Categoria switch
+                        {
+                            "Empanadas" => "🥟",
+                            "Bebidas" => "🥤",
+                            _ => "🍕"
+                        };
+                        var tieneFoto = !string.IsNullOrWhiteSpace(pizza.ImagenURL);
                     }
+                    @* La foto se muestra completa (sin recortes). Si no hay foto, o no carga, aparece un reemplazo. *@
+                    <div class="product-media card-img-top">
+                        @if (tieneFoto)
+                        {
+                            <img src="@pizza.ImagenURL" alt="@pizza.Nombre" class="product-img" loading="lazy"
+                                 onerror="this.hidden = true; this.nextElementSibling.hidden = false;" />
+                        }
+                        <div class="product-placeholder" hidden="@tieneFoto" aria-hidden="true">
+                            <span class="product-placeholder__icon">@icono</span>
+                            <span class="product-placeholder__name">@pizza.Nombre</span>
+                        </div>
+                    </div>
 
                     <div class="card-body d-flex flex-column">
 
