@@ -6,15 +6,19 @@ using ApiwebMVC.Services;
 
 namespace ApiwebMVC.Controllers;
 
-/// <summary>Panel del administrador: ver todos los pedidos y avanzar su estado.</summary>
+/// <summary>Panel del administrador: pedidos (ver y avanzar estado) e imágenes de los productos.</summary>
 [Authorize(Policy = Roles.Admin)]
 public sealed class AdminController : Controller
 {
     private readonly IPedidoService _pedidos;
+    private readonly IPizzaService _pizzas;
+    private readonly IWebHostEnvironment _environment;
 
-    public AdminController(IPedidoService pedidos)
+    public AdminController(IPedidoService pedidos, IPizzaService pizzas, IWebHostEnvironment environment)
     {
         _pedidos = pedidos;
+        _pizzas = pizzas;
+        _environment = environment;
     }
 
     [HttpGet]
@@ -49,5 +53,44 @@ public sealed class AdminController : Controller
         }
 
         return RedirectToAction(nameof(Index));
+    }
+
+    // ---------- Imágenes de los productos ----------
+
+    [HttpGet]
+    public async Task<IActionResult> Imagenes(string? categoria = null)
+    {
+        var productos = (await _pizzas.GetAllAsync())
+            .Where(p => string.IsNullOrWhiteSpace(categoria) || string.Equals(p.Categoria, categoria, StringComparison.OrdinalIgnoreCase))
+            .OrderBy(p => p.Categoria).ThenBy(p => p.Nombre)
+            .ToList();
+
+        ViewBag.Categoria = categoria;
+        return View(productos);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [RequestSizeLimit(FotosProductos.TamanioMaximo + 64 * 1024)]
+    public async Task<IActionResult> SubirImagen(int id, IFormFile? foto, string? categoria = null)
+    {
+        var producto = await _pizzas.GetByIdAsync(id);
+        if (producto is null)
+            return NotFound();
+
+        try
+        {
+            var ruta = await FotosProductos.GuardarFotoAsync(_environment.WebRootPath, producto.Nombre, foto!);
+            // ?v= cambia en cada subida para que el navegador no muestre la foto vieja guardada en caché.
+            producto.ImagenURL = $"{ruta}?v={DateTime.UtcNow.Ticks}";
+            await _pizzas.UpdateAsync(id, producto);
+            TempData["SuccessMessage"] = $"Foto de «{producto.Nombre}» actualizada.";
+        }
+        catch (ValidationException ex)
+        {
+            TempData["ErrorMessage"] = $"«{producto.Nombre}»: {ex.Errors.Values.SelectMany(e => e).FirstOrDefault()}";
+        }
+
+        return RedirectToAction(nameof(Imagenes), new { categoria });
     }
 }

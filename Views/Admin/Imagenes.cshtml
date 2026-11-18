@@ -1,0 +1,72 @@
+@model IReadOnlyList<ApiwebMVC.Models.Pizza>
+
+@{
+    ViewData["Title"] = "Imágenes de productos";
+    var categoriaFiltro = ViewBag.Categoria as string;
+    var conFoto = Model.Count(p => !string.IsNullOrWhiteSpace(p.ImagenURL));
+}
+
+<div class="container py-4">
+    <p class="eyebrow eyebrow-dark">Administración</p>
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+        <div>
+            <h1 class="h2 mb-1">Imágenes de productos</h1>
+            <p class="text-muted mb-0">@conFoto de @Model.Count productos tienen foto. Elegí una imagen y tocá <b>Subir</b>: se guarda en el proyecto con el nombre correcto.</p>
+        </div>
+        <a class="btn btn-outline-dark" asp-action="Index">← Panel de pedidos</a>
+    </div>
+
+    @if (TempData["SuccessMessage"] is string ok)
+    {
+        <div class="alert alert-success" role="status">@ok</div>
+    }
+    @if (TempData["ErrorMessage"] is string error)
+    {
+        <div class="alert alert-danger" role="alert">@error</div>
+    }
+
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <a class="btn btn-sm @(string.IsNullOrEmpty(categoriaFiltro) ? "btn-dark" : "btn-outline-dark")" asp-action="Imagenes">Todos</a>
+        @foreach (var cat in new[] { "Pizzas", "Empanadas", "Bebidas" })
+        {
+            <a class="btn btn-sm @(categoriaFiltro == cat ? "btn-dark" : "btn-outline-dark")" asp-action="Imagenes" asp-route-categoria="@cat">@cat</a>
+        }
+    </div>
+
+    <div class="row g-4">
+        @foreach (var producto in Model)
+        {
+            var icono = producto.Categoria switch { "Empanadas" => "🥟", "Bebidas" => "🥤", _ => "🍕" };
+            var tieneFoto = !string.IsNullOrWhiteSpace(producto.ImagenURL);
+            var archivo = ApiwebMVC.Services.FotosProductos.NombreArchivo(producto.Nombre);
+            <div class="col-sm-6 col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="product-media card-img-top">
+                        @if (tieneFoto)
+                        {
+                            <img src="@producto.ImagenURL" alt="@producto.Nombre" class="product-img" loading="lazy"
+                                 onerror="this.hidden = true; this.nextElementSibling.hidden = false;" />
+                        }
+                        <div class="product-placeholder" hidden="@tieneFoto" aria-hidden="true">
+                            <span class="product-placeholder__icon">@icono</span>
+                            <span class="product-placeholder__name">Sin foto</span>
+                        </div>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h2 class="h5 mb-1">@producto.Nombre</h2>
+                        <p class="small text-muted mb-3">@producto.Categoria · archivo <code>@(archivo).jpg</code></p>
+                        <form asp-action="SubirImagen" asp-route-id="@producto.Id" asp-route-categoria="@categoriaFiltro"
+                              method="post" enctype="multipart/form-data" class="mt-auto">
+                            <label class="form-label small" for="foto-@producto.Id">Nueva foto (JPG, PNG o WEBP, hasta 5 MB)</label>
+                            <div class="d-flex gap-2">
+                                <input id="foto-@producto.Id" name="foto" type="file" class="form-control form-control-sm"
+                                       accept="image/jpeg,image/png,image/webp" required />
+                                <button type="submit" class="btn btn-sm btn-primary">Subir</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

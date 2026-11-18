@@ -71,6 +71,10 @@ El menú muestra cada foto **completa**, sin recortes. Si un producto no tiene f
 
 Para usar fotos propias en buena calidad, que además funcionan sin internet:
 
+**Opción A · Desde la app (la más fácil):** iniciá sesión como admin, entrá a **Imágenes** (en el menú o en el Panel admin), elegí la foto de cada producto y tocá **Subir**. La app la valida (JPG, PNG o WEBP, hasta 5 MB), la guarda en `wwwroot/img/productos/` con el nombre correcto y la asigna al producto al instante.
+
+**Opción B · Copiando los archivos a mano:**
+
 1. Guardá la foto en `wwwroot/img/productos/` con el nombre de la tabla (también sirven `.jpeg`, `.png` o `.webp`).
 2. Reiniciá la app (`dotnet run`): al arrancar asigna sola la foto a su producto. La foto local tiene prioridad sobre una dirección web.
 

@@ -229,7 +229,7 @@ public static class PizzaSeeder
         foreach (var producto in productos)
         {
             var fotoLocal = ApiwebMVC.Services.FotosProductos.BuscarFotoLocal(webRootPath, producto.Nombre);
-            if (fotoLocal is not null && producto.ImagenURL != fotoLocal)
+            if (fotoLocal is not null && producto.ImagenURL?.Split('?')[0] != fotoLocal)
             {
                 producto.ImagenURL = fotoLocal;
                 cambios++;

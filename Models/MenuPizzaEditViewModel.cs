@@ -23,7 +23,7 @@ public class MenuPizzaEditViewModel
     public string Categoria { get; set; } = "Pizzas";
 
     // Una dirección web (https://…) o una foto guardada en el proyecto (/img/productos/…).
-    [RegularExpression(@"^(https?://\S+|/img/productos/[A-Za-z0-9._-]+)$",
+    [RegularExpression(@"^(https?://\S+|/img/productos/[A-Za-z0-9._-]+(\?v=[0-9]+)?)$",
         ErrorMessage = "Usá una dirección https://… o una foto local /img/productos/archivo.jpg.")]
     public string? ImagenURL { get; set; }
 }

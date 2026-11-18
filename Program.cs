@@ -119,6 +119,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+// Sirve también las fotos subidas desde "Imágenes" mientras la app está funcionando.
+app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 
