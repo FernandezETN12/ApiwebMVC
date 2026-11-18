@@ -63,7 +63,10 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy(ApiwebMVC.Models.Roles.Admin, policy => policy.RequireRole(ApiwebMVC.Models.Roles.Admin));
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    // El estado del pedido viaja en el JSON como texto ("EnPreparacion") en vez de número.
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
