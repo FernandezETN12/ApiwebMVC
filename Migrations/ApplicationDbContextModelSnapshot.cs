@@ -95,7 +95,7 @@ namespace ApiwebMVC.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -122,7 +122,7 @@ namespace ApiwebMVC.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("PrecioUnitario")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
