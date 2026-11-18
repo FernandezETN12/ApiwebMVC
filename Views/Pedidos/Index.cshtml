@@ -18,6 +18,10 @@
     {
         <p class="mb-4">Todavía no agregaste productos.</p>
         <a asp-controller="Menu" asp-action="Index" class="btn btn-primary">Ver menú</a>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <a asp-controller="PedidosPage" asp-action="Index" class="btn btn-outline-secondary">Ver mis pedidos</a>
+        }
     }
     else
     {
@@ -70,29 +74,39 @@
 
         <section class="border-top pt-4">
             <h2 class="h4 mb-3">Datos de entrega</h2>
-            <form asp-action="Confirmar" method="post">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <label asp-for="ClienteNombre" class="form-label">Nombre</label>
-                        <input asp-for="ClienteNombre" class="form-control" autocomplete="name" />
-                        <span asp-validation-for="ClienteNombre" class="text-danger"></span>
-                    </div>
-                    <div class="col-md-4">
-                        <label asp-for="ClienteTelefono" class="form-label">Teléfono</label>
-                        <input asp-for="ClienteTelefono" class="form-control" autocomplete="tel" />
-                        <span asp-validation-for="ClienteTelefono" class="text-danger"></span>
-                    </div>
-                    <div class="col-md-4">
-                        <label asp-for="ClienteDireccion" class="form-label">Dirección</label>
-                        <input asp-for="ClienteDireccion" class="form-control" autocomplete="street-address" />
-                        <span asp-validation-for="ClienteDireccion" class="text-danger"></span>
-                    </div>
+            @if (User.Identity?.IsAuthenticated != true)
+            {
+                <div class="alert alert-info">
+                    Para confirmar el pedido tenés que iniciar sesión. Tu carrito se guarda mientras tanto.
                 </div>
-                <div class="d-flex flex-wrap gap-2 mt-4">
-                    <button type="submit" class="btn btn-primary">Confirmar pedido · $@Model.Total.ToString("N0")</button>
-                    <a asp-controller="Menu" asp-action="Index" class="btn btn-outline-secondary">Seguir comprando</a>
-                </div>
-            </form>
+                <a class="btn btn-primary" asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Pedidos">Iniciar sesión para confirmar</a>
+                <a asp-controller="Menu" asp-action="Index" class="btn btn-outline-secondary">Seguir comprando</a>
+            }
+            else
+            {
+                <form asp-action="Confirmar" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label asp-for="ClienteNombre" class="form-label">Nombre</label>
+                            <input asp-for="ClienteNombre" class="form-control" readonly />
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="ClienteTelefono" class="form-label">Teléfono</label>
+                            <input asp-for="ClienteTelefono" class="form-control" autocomplete="tel" />
+                            <span asp-validation-for="ClienteTelefono" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="ClienteDireccion" class="form-label">Dirección</label>
+                            <input asp-for="ClienteDireccion" class="form-control" autocomplete="street-address" />
+                            <span asp-validation-for="ClienteDireccion" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Confirmar pedido · $@Model.Total.ToString("N0")</button>
+                        <a asp-controller="Menu" asp-action="Index" class="btn btn-outline-secondary">Seguir comprando</a>
+                    </div>
+                </form>
+            }
         </section>
     }
 </div>

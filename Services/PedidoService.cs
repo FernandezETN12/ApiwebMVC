@@ -15,18 +15,24 @@ public sealed class PedidoService : IPedidoService
         _db = db;
     }
 
+    private IQueryable<Pedido> PedidosConDetalle() =>
+        _db.Pedidos.AsNoTracking()
+            .Include(p => p.Cliente)
+            .Include(p => p.Detalles).ThenInclude(d => d.Pizza);
+
     public async Task<IReadOnlyCollection<Pedido>> GetAllAsync() =>
-        await _db.Pedidos.AsNoTracking().Include(p => p.Detalles).ThenInclude(d => d.Pizza).ToListAsync();
+        await PedidosConDetalle().OrderByDescending(p => p.FechaPedido).ToListAsync();
 
     public async Task<Pedido?> GetByIdAsync(int id) =>
-        await _db.Pedidos.AsNoTracking().Include(p => p.Detalles).ThenInclude(d => d.Pizza)
-            .FirstOrDefaultAsync(p => p.Id == id);
+        await PedidosConDetalle().FirstOrDefaultAsync(p => p.Id == id);
 
     public async Task<IReadOnlyCollection<Pedido>> GetByClienteAsync(int clienteId) =>
-        await _db.Pedidos.AsNoTracking().Include(p => p.Detalles).Where(p => p.ClienteId == clienteId).ToListAsync();
+        await PedidosConDetalle().Where(p => p.ClienteId == clienteId)
+            .OrderByDescending(p => p.FechaPedido).ToListAsync();
 
     public async Task<IReadOnlyCollection<Pedido>> GetByEstadoAsync(EstadoPedido estado) =>
-        await _db.Pedidos.AsNoTracking().Include(p => p.Detalles).Where(p => p.Estado == estado).ToListAsync();
+        await PedidosConDetalle().Where(p => p.Estado == estado)
+            .OrderByDescending(p => p.FechaPedido).ToListAsync();
 
     public async Task<Pedido> CreateAsync(CreatePedidoRequest request)
     {

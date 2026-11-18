@@ -27,6 +27,31 @@
             </div>
         }
 
+        @if (TempData["LoginError"] is string loginError)
+        {
+            <div class="alert alert-danger mt-3" role="alert">@loginError</div>
+        }
+
+        @if (ViewData["DevLoginEnabled"] is true)
+        {
+            <hr class="my-4" />
+            <p class="small text-muted mb-2">
+                <strong>Login de prueba (solo Development).</strong>
+                Entrá con cualquier email. Si está en la lista <code>Admin:Emails</code>, entrás como admin.
+            </p>
+            <form asp-controller="Account" asp-action="DevLogin" asp-route-returnUrl="@returnUrl" method="post" class="text-start">
+                <div class="mb-2">
+                    <label for="dev-email" class="form-label small">Email</label>
+                    <input id="dev-email" name="email" type="email" class="form-control" required placeholder="cliente@prueba.com" />
+                </div>
+                <div class="mb-3">
+                    <label for="dev-nombre" class="form-label small">Nombre (opcional)</label>
+                    <input id="dev-nombre" name="nombre" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-outline-dark w-100">Entrar como prueba</button>
+            </form>
+        }
+
         <a class="login-card__back" asp-controller="Home" asp-action="Index">← Volver al sitio</a>
     </section>
 </div>

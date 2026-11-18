@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ApiwebMVC.Models;
 
 namespace ApiwebMVC.Controllers;
 
+// Lista de clientes de ejemplo en memoria: solo para el admin.
+[Authorize(Policy = Roles.Admin)]
 [ApiController]
 [Route("api/[controller]")]
 public class ClientesController : ControllerBase

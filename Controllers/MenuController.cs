@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ApiwebMVC.Models;
 using ApiwebMVC.Services;
@@ -42,6 +43,7 @@ public class MenuController : Controller
         return RedirectToAction("Index", "Pedidos");
     }
 
+    [Authorize(Policy = Roles.Admin)]
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
@@ -63,6 +65,7 @@ public class MenuController : Controller
         });
     }
 
+    [Authorize(Policy = Roles.Admin)]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, MenuPizzaEditViewModel model)

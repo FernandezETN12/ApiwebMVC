@@ -72,6 +72,15 @@
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item">
+                                <a class="nav-link" asp-controller="PedidosPage" asp-action="Index">Mis pedidos</a>
+                            </li>
+                            @if (User.EsAdmin())
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Admin" asp-action="Index">Panel admin</a>
+                                </li>
+                            }
+                            <li class="nav-item">
                                 <a class="nav-link" asp-controller="Account" asp-action="Perfil">@User.Identity.Name</a>
                             </li>
                             <li class="nav-item">

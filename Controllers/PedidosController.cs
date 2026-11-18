@@ -1,26 +1,41 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiwebMVC.Data;
 using ApiwebMVC.Models;
+using ApiwebMVC.Models.DTOs;
 using ApiwebMVC.Services;
 
 namespace ApiwebMVC.Controllers;
 
+/// <summary>
+/// Carrito y confirmación (páginas web) + API REST de pedidos en /api/pedidos.
+/// - Cualquiera puede armar el carrito.
+/// - Para confirmar un pedido hay que iniciar sesión.
+/// - Un cliente solo ve y cancela sus propios pedidos; el admin ve todos y cambia estados.
+/// </summary>
 [Route("api/[controller]")]
 public class PedidosController : Controller
 {
     private readonly ApplicationDbContext _db;
+    private readonly IPedidoService _pedidos;
+    private readonly IClienteService _clientes;
 
-    public PedidosController(ApplicationDbContext db)
+    public PedidosController(ApplicationDbContext db, IPedidoService pedidos, IClienteService clientes)
     {
         _db = db;
+        _pedidos = pedidos;
+        _clientes = clientes;
     }
+
+    // ---------- Páginas web (carrito) ----------
 
     [HttpGet("/Pedidos")]
     [HttpGet("/Pedidos/Index")]
     public async Task<IActionResult> Index()
     {
         var model = await BuildViewModelAsync(CarritoSession.Get(HttpContext));
+        await PrefillClienteAsync(model);
         return View(model);
     }
 
@@ -52,52 +67,54 @@ public class PedidosController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [Authorize]
     [HttpPost("/Pedidos/Confirmar")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Confirmar([FromForm] PedidoIndexViewModel model)
     {
+        var clienteId = User.GetClienteId();
+        if (clienteId is null)
+            return RedirectToAction("Login", "Account", new { returnUrl = "/Pedidos" });
+
         var cart = CarritoSession.Get(HttpContext);
         var items = await BuildViewModelAsync(cart);
-        items.ClienteNombre = model.ClienteNombre;
+        items.ClienteNombre = User.Identity?.Name ?? model.ClienteNombre;
         items.ClienteTelefono = model.ClienteTelefono;
         items.ClienteDireccion = model.ClienteDireccion;
 
-        if (!ModelState.IsValid || items.Items.Count == 0)
-        {
-            if (items.Items.Count == 0)
-            {
-                ModelState.AddModelError(string.Empty, "Agrega al menos un producto antes de confirmar.");
-            }
+        // El nombre sale de la cuenta, no del formulario.
+        ModelState.Remove(nameof(PedidoIndexViewModel.ClienteNombre));
 
+        if (items.Items.Count == 0)
+            ModelState.AddModelError(string.Empty, "Agrega al menos un producto antes de confirmar.");
+
+        if (!ModelState.IsValid)
             return View("Index", items);
-        }
 
-        var client = new Cliente
-        {
-            Nombre = model.ClienteNombre.Trim(),
-            Telefono = model.ClienteTelefono.Trim(),
-            Direccion = model.ClienteDireccion.Trim(),
-            FechaRegistro = DateTime.UtcNow
-        };
-        var order = new Pedido
-        {
-            Cliente = client,
-            Estado = EstadoPedido.EsperaDeConfirmacion,
-            FechaPedido = DateTime.UtcNow,
-            Total = items.Total,
-            Detalles = items.Items.Select(item => new PedidoDetalle
-            {
-                PizzaId = item.Pizza.Id,
-                Cantidad = item.Cantidad,
-                PrecioUnitario = item.Pizza.Precio
-            }).ToList()
-        };
+        await _clientes.ActualizarContactoAsync(clienteId.Value, model.ClienteTelefono.Trim(), model.ClienteDireccion.Trim());
 
-        _db.Pedidos.Add(order);
-        await _db.SaveChangesAsync();
+        var pedido = await _pedidos.CreateAsync(new CreatePedidoRequest
+        {
+            ClienteId = clienteId.Value,
+            Detalles = items.Items
+                .Select(item => new CreatePedidoDetalleRequest { PizzaId = item.Pizza.Id, Cantidad = item.Cantidad })
+                .ToList()
+        });
+
         CarritoSession.Clear(HttpContext);
-        TempData["SuccessMessage"] = $"Pedido #{order.Id} confirmado. Total: ${order.Total:N0}.";
+        TempData["SuccessMessage"] = $"Pedido #{pedido.Id} confirmado. Total: ${pedido.Total:N0}. Podés seguirlo en \"Mis pedidos\".";
         return RedirectToAction(nameof(Index));
+    }
+
+    private async Task PrefillClienteAsync(PedidoIndexViewModel model)
+    {
+        var clienteId = User.GetClienteId();
+        if (clienteId is null) return;
+
+        var cliente = await _clientes.GetByIdAsync(clienteId.Value);
+        model.ClienteNombre = User.Identity?.Name ?? cliente?.Nombre ?? string.Empty;
+        model.ClienteTelefono = cliente?.Telefono ?? string.Empty;
+        model.ClienteDireccion = cliente?.Direccion ?? string.Empty;
     }
 
     private async Task<PedidoIndexViewModel> BuildViewModelAsync(Dictionary<int, int> cart)
@@ -117,121 +134,88 @@ public class PedidosController : Controller
         };
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidos()
-    {
-        var orders = await _db.Pedidos.AsNoTracking()
-            .Include(pedido => pedido.Detalles)
-            .ThenInclude(detail => detail.Pizza)
-            .ToListAsync();
-        return Ok(orders);
-    }
+    // ---------- API REST /api/pedidos ----------
 
+    [Authorize(Policy = Roles.Admin)]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidos() =>
+        Ok(await _pedidos.GetAllAsync());
+
+    [Authorize]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<Pedido>> GetPedido(int id)
     {
-        var order = await _db.Pedidos.AsNoTracking()
-            .Include(pedido => pedido.Detalles)
-            .ThenInclude(detail => detail.Pizza)
-            .FirstOrDefaultAsync(pedido => pedido.Id == id);
-        if (order == null)
+        var pedido = await _pedidos.GetByIdAsync(id);
+        if (pedido is null || !PuedeVerCliente(pedido.ClienteId))
             return NotFound(new { mensaje = "Pedido no encontrado" });
 
-        return Ok(order);
+        return Ok(pedido);
     }
 
+    [Authorize]
     [HttpPost]
-    public async Task<ActionResult<Pedido>> CreatePedido([FromBody] Pedido pedido)
+    [IgnoreAntiforgeryToken]
+    public async Task<ActionResult<Pedido>> CreatePedido([FromBody] CreatePedidoRequest request)
     {
-        if (pedido.ClienteId <= 0 || pedido.Detalles == null || pedido.Detalles.Count == 0)
+        // Un cliente solo puede crear pedidos a su nombre; el admin puede indicar cualquier cliente.
+        if (!User.EsAdmin())
         {
-            return BadRequest(new { mensaje = "El pedido requiere un cliente y al menos un artículo." });
+            var clienteId = User.GetClienteId();
+            if (clienteId is null) return Forbid();
+            request = request with { ClienteId = clienteId.Value };
         }
 
-        pedido.Id = 0;
-        pedido.FechaPedido = DateTime.UtcNow;
-        pedido.Estado = EstadoPedido.EsperaDeConfirmacion;
-        foreach (var detail in pedido.Detalles)
-        {
-            detail.Id = 0;
-            detail.PedidoId = 0;
-        }
-
-        _db.Pedidos.Add(pedido);
-        await _db.SaveChangesAsync();
+        var pedido = await _pedidos.CreateAsync(request);
         return CreatedAtAction(nameof(GetPedido), new { id = pedido.Id }, pedido);
     }
 
+    [Authorize(Policy = Roles.Admin)]
     [HttpPut("{id:int}/confirmar")]
-    public async Task<IActionResult> ConfirmarPedido(int id)
-    {
-        return await ChangeStatusAsync(id, EstadoPedido.EsperaDeConfirmacion, EstadoPedido.EnPreparacion,
-            pedido => { pedido.FechaConfirmacion = DateTime.UtcNow; });
-    }
+    [IgnoreAntiforgeryToken]
+    public async Task<IActionResult> ConfirmarPedido(int id) =>
+        Ok(new { mensaje = "Estado del pedido actualizado", pedido = await _pedidos.ConfirmarAsync(id) });
 
+    [Authorize(Policy = Roles.Admin)]
     [HttpPut("{id:int}/en-viaje")]
-    public async Task<IActionResult> EnViajePedido(int id)
-    {
-        return await ChangeStatusAsync(id, EstadoPedido.EnPreparacion, EstadoPedido.EnViaje,
-            pedido => { pedido.FechaEnViaje = DateTime.UtcNow; });
-    }
+    [IgnoreAntiforgeryToken]
+    public async Task<IActionResult> EnViajePedido(int id) =>
+        Ok(new { mensaje = "Estado del pedido actualizado", pedido = await _pedidos.EnviarAsync(id) });
 
+    [Authorize(Policy = Roles.Admin)]
     [HttpPut("{id:int}/entregar")]
-    public async Task<IActionResult> EntregarPedido(int id)
-    {
-        return await ChangeStatusAsync(id, EstadoPedido.EnViaje, EstadoPedido.Entregado,
-            pedido => { pedido.FechaEntrega = DateTime.UtcNow; });
-    }
+    [IgnoreAntiforgeryToken]
+    public async Task<IActionResult> EntregarPedido(int id) =>
+        Ok(new { mensaje = "Estado del pedido actualizado", pedido = await _pedidos.EntregarAsync(id) });
 
-    private async Task<IActionResult> ChangeStatusAsync(
-        int id,
-        EstadoPedido expected,
-        EstadoPedido next,
-        Action<Pedido> setTimestamp)
-    {
-        var order = await _db.Pedidos.FindAsync(id);
-        if (order == null)
-            return NotFound(new { mensaje = "Pedido no encontrado" });
-        if (order.Estado != expected)
-            return BadRequest(new { mensaje = "El pedido no se encuentra en el estado requerido." });
-
-        order.Estado = next;
-        setTimestamp(order);
-        await _db.SaveChangesAsync();
-        return Ok(new { mensaje = "Estado del pedido actualizado", pedido = order });
-    }
-
+    [Authorize]
     [HttpGet("cliente/{clienteId:int}")]
     public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidosPorCliente(int clienteId)
     {
-        var orders = await _db.Pedidos.AsNoTracking()
-            .Where(order => order.ClienteId == clienteId)
-            .Include(order => order.Detalles)
-            .ToListAsync();
-        return Ok(orders);
+        if (!PuedeVerCliente(clienteId))
+            return Forbid();
+
+        return Ok(await _pedidos.GetByClienteAsync(clienteId));
     }
 
+    [Authorize(Policy = Roles.Admin)]
     [HttpGet("estado/{estado}")]
-    public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidosPorEstado(EstadoPedido estado)
-    {
-        var orders = await _db.Pedidos.AsNoTracking()
-            .Where(order => order.Estado == estado)
-            .Include(order => order.Detalles)
-            .ToListAsync();
-        return Ok(orders);
-    }
+    public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidosPorEstado(EstadoPedido estado) =>
+        Ok(await _pedidos.GetByEstadoAsync(estado));
 
+    /// <summary>Cancela un pedido. Solo mientras está en espera de confirmación.</summary>
+    [Authorize]
     [HttpDelete("{id:int}")]
+    [IgnoreAntiforgeryToken]
     public async Task<IActionResult> DeletePedido(int id)
     {
-        var order = await _db.Pedidos.FindAsync(id);
-        if (order == null)
-            return NotFound();
-        if (order.Estado != EstadoPedido.EsperaDeConfirmacion)
-            return BadRequest(new { mensaje = "Solo se pueden eliminar pedidos en espera de confirmación." });
+        var pedido = await _pedidos.GetByIdAsync(id);
+        if (pedido is null || !PuedeVerCliente(pedido.ClienteId))
+            return NotFound(new { mensaje = "Pedido no encontrado" });
 
-        _db.Pedidos.Remove(order);
-        await _db.SaveChangesAsync();
+        await _pedidos.DeleteAsync(id);
         return NoContent();
     }
+
+    private bool PuedeVerCliente(int clienteId) =>
+        User.EsAdmin() || User.GetClienteId() == clienteId;
 }

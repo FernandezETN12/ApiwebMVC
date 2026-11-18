@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ApiwebMVC.Models;
 using ApiwebMVC.Services;
@@ -30,6 +31,7 @@ public class PizzasController : ControllerBase
         return Ok(pizza);
     }
 
+    [Authorize(Policy = Roles.Admin)]
     [HttpPost]
     public async Task<ActionResult<Pizza>> CreatePizza([FromBody] Pizza pizza)
     {
@@ -37,6 +39,7 @@ public class PizzasController : ControllerBase
         return CreatedAtAction(nameof(GetPizza), new { id = created.Id }, created);
     }
 
+    [Authorize(Policy = Roles.Admin)]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePizza(int id, [FromBody] Pizza pizza)
     {
@@ -45,6 +48,7 @@ public class PizzasController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = Roles.Admin)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePizza(int id)
     {
