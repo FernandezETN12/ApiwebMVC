@@ -12,13 +12,15 @@ Configura la conexión fuera de los archivos versionados. User Secrets se conser
 
 ```bash
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost;Port=3306;Database=5to_pizzeria_db;User=TU_USUARIO;Password=TU_PASSWORD;"
+dotnet user-secrets set "Authentication:Google:ClientId" "TU_CLIENT_ID"
+dotnet user-secrets set "Authentication:Google:ClientSecret" "TU_CLIENT_SECRET"
 dotnet restore
 dotnet run
 ```
 
 Al iniciar, la aplicación aplica las migraciones de EF Core y siembra los productos que falten en el catálogo. El servidor MySQL debe estar activo y el usuario configurado debe tener permisos de creación y modificación de tablas.
 
-En servidores, configura la variable de entorno `ConnectionStrings__DefaultConnection` en lugar de User Secrets.
+En servidores, configura las variables de entorno `ConnectionStrings__DefaultConnection`, `Authentication__Google__ClientId` y `Authentication__Google__ClientSecret` en lugar de User Secrets.
 
 
 ## Usuarios y roles
@@ -49,10 +51,7 @@ El rol se calcula al iniciar sesión: si agregás un email, esa persona tiene qu
 
 ### Login con Google
 
-```bash
-dotnet user-secrets set "Authentication:Google:ClientId" "TU_CLIENT_ID"
-dotnet user-secrets set "Authentication:Google:ClientSecret" "TU_CLIENT_SECRET"
-```
+Las dos credenciales se configuran con los comandos anteriores. Si no se proporcionan, el login con Google queda desactivado.
 
 En Google Cloud Console, la URI de redirección autorizada es `http://localhost:5046/signin-google` (y la versión https si usás ese perfil).
 

@@ -1,3 +1,5 @@
+USE `5to_Pizzeria`;
+
 INSERT INTO Pizzas
     (Nombre, Descripcion, Precio, Ingredientes, FechaCreacion, ImagenUrl)
 VALUES

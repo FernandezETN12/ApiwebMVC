@@ -1,9 +1,7 @@
 -- Crear base de datos y usuario (ajusta la contraseña y el host según sea necesario)
-CREATE DATABASE IF NOT EXISTS `pizzeria_db`
-  CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS `5to_Pizzeria` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE `pizzeria_db`;
+USE `5to_Pizzeria`;
 
 -- Tabla Clientes
 CREATE TABLE IF NOT EXISTS `Clientes` (
