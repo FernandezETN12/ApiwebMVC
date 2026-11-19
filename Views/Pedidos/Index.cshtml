@@ -91,14 +91,19 @@
                             <input asp-for="ClienteNombre" class="form-control" readonly />
                         </div>
                         <div class="col-md-4">
-                            <label asp-for="ClienteTelefono" class="form-label">Teléfono</label>
+                            <label asp-for="ClienteTelefono" class="form-label">Teléfono <small class="text-muted">(opcional)</small></label>
                             <input asp-for="ClienteTelefono" class="form-control" autocomplete="tel" />
                             <span asp-validation-for="ClienteTelefono" class="text-danger"></span>
                         </div>
-                        <div class="col-md-4">
-                            <label asp-for="ClienteDireccion" class="form-label">Dirección</label>
-                            <input asp-for="ClienteDireccion" class="form-control" autocomplete="street-address" />
-                            <span asp-validation-for="ClienteDireccion" class="text-danger"></span>
+                        <div class="col-md-2">
+                            <label asp-for="ClienteCalle" class="form-label">Calle</label>
+                            <input asp-for="ClienteCalle" class="form-control" autocomplete="address-line1" />
+                            <span asp-validation-for="ClienteCalle" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-2">
+                            <label asp-for="ClienteAltura" class="form-label">Número</label>
+                            <input asp-for="ClienteAltura" class="form-control" autocomplete="address-line2" />
+                            <span asp-validation-for="ClienteAltura" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="d-flex flex-wrap gap-2 mt-4">

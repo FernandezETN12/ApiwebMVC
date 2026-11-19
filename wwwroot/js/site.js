@@ -6,7 +6,8 @@
 	Object.assign(toast.style, {
 		position: "fixed",
 		right: "1.25rem",
-		bottom: "1.25rem",
+		top: "6rem",
+		bottom: "auto",
 		zIndex: "1080",
 		maxWidth: "min(24rem, calc(100vw - 2.5rem))",
 		padding: ".8rem 1rem",

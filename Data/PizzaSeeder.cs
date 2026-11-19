@@ -22,7 +22,7 @@ public static class PizzaSeeder
                 Precio = 8500.00m,
                 Ingredientes = new List<string> { "Salsa de tomate", "Muzzarella", "Orégano" },
                 FechaCreacion = createdAt,
-                ImagenURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiv6PvL2gD48msLbXb4J7H66gtlEZXRz_hoiusv8_Iauzfqrf--5AyHMqr&s=10"
+                ImagenURL = "/img/productos/muzzarella.webp"
             },
             new Pizza
             {
@@ -31,7 +31,7 @@ public static class PizzaSeeder
                 Precio = 9500.00m,
                 Ingredientes = new List<string> { "Salsa de tomate", "Muzzarella", "Tomate", "Orégano" },
                 FechaCreacion = createdAt,
-                ImagenURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTIdLIoB8enL1kftBxlu5wP35taYZpdKOTnMASgWz6ntAKQgW8SenPcZA&s=10"
+                ImagenURL = "/img/productos/napolitana.jpg"
             },
             new Pizza
             {
@@ -40,7 +40,7 @@ public static class PizzaSeeder
                 Precio = 10500.00m,
                 Ingredientes = new List<string> { "Salsa de tomate", "Muzzarella", "Jamón", "Morrones" },
                 FechaCreacion = createdAt,
-                ImagenURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzOE0BX7CQJyfwzEhmeyX-V4XaWm_ieQDrJ9jOBH-JX4E0nBXagjNumlh4&s=10"
+                ImagenURL = "/img/productos/jamon-y-morrones.jpg"
             },
             new Pizza
             {
@@ -49,7 +49,7 @@ public static class PizzaSeeder
                 Precio = 11000.00m,
                 Ingredientes = new List<string> { "Muzzarella", "Cebolla", "Orégano" },
                 FechaCreacion = createdAt,
-                ImagenURL = "https://latorrepizza.com.ar/wp-content/uploads/2023/05/fugazzeta-con-jamon.png"
+                ImagenURL = "/img/productos/fugazzeta.jpg"
             },
             new Pizza
             {
@@ -58,16 +58,7 @@ public static class PizzaSeeder
                 Precio = 11500.00m,
                 Ingredientes = new List<string> { "Salsa de tomate", "Muzzarella", "Longaniza calabresa", "Orégano" },
                 FechaCreacion = createdAt,
-                ImagenURL = "https://img.magnific.com/psd-gratis/deliciosa-pizza-pepperoni-es-delicia-culinaria_632498-24206.jpg?semt=ais_hybrid&w=740&q=80"
-            },
-            new Pizza
-            {
-                Nombre = "Tomate con Albahaca",
-                Descripcion = "Pizza con tomate, muzzarella y albahaca fresca.",
-                Precio = 12000.00m,
-                Ingredientes = new List<string> { "Tomate", "Muzzarella", "Albahaca" },
-                FechaCreacion = createdAt,
-                ImagenURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdhRuSkQ6cppQwCb2CSJ1Ty3HuGQWW9g3VWdxpi5L9Iw&s=10"
+                ImagenURL = "/img/productos/calabresa.jpg"
             },
                 new Pizza
                 {
@@ -75,7 +66,8 @@ public static class PizzaSeeder
                     Descripcion = "Tomate, mozzarella, albahaca y aceite de oliva.",
                     Precio = 18000m,
                     Ingredientes = new List<string> { "Tomate", "Mozzarella", "Albahaca" },
-                    FechaCreacion = createdAt
+                    FechaCreacion = createdAt,
+                    ImagenURL = "/img/productos/margherita.jpg"
                 },
                 new Pizza
                 {
@@ -83,7 +75,8 @@ public static class PizzaSeeder
                     Descripcion = "Rúcula fresca, parmesano y mozzarella.",
                     Precio = 22000m,
                     Ingredientes = new List<string> { "Rúcula", "Parmesano", "Mozzarella" },
-                    FechaCreacion = createdAt
+                    FechaCreacion = createdAt,
+                    ImagenURL = "/img/productos/rucula-parmesano.jpg"
                 },
                 new Pizza
                 {
@@ -91,7 +84,8 @@ public static class PizzaSeeder
                     Descripcion = "Salami picante, mozzarella, ajo y un final ahumado.",
                     Precio = 24000m,
                     Ingredientes = new List<string> { "Salami picante", "Mozzarella", "Ajo" },
-                    FechaCreacion = createdAt
+                    FechaCreacion = createdAt,
+                    ImagenURL = "/img/productos/diavola.jpg"
                 },
                 new Pizza
                 {

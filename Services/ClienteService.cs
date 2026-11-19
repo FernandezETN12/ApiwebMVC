@@ -61,4 +61,15 @@ public sealed class ClienteService : IClienteService
         cliente.Direccion = direccion;
         await _db.SaveChangesAsync();
     }
+
+    public async Task ActualizarDireccionAsync(int clienteId, string telefono, string calle, string altura, string direccion)
+    {
+        var cliente = await _db.Clientes.FindAsync(clienteId)
+            ?? throw new Exceptions.NotFoundException("El cliente indicado no existe.");
+        cliente.Telefono = telefono;
+        cliente.Calle = calle;
+        cliente.Altura = altura;
+        cliente.Direccion = direccion;
+        await _db.SaveChangesAsync();
+    }
 }

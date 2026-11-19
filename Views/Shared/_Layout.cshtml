@@ -14,6 +14,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Pizzeria</title>
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" asp-append-version="true" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,7 +35,7 @@
 
                 <a class="navbar-brand pizzeria-logo" asp-controller="Home" asp-action="Index">
 
-                    <span class="logo-icon">🍕</span>
+                    <img class="logo-icon" src="~/img/pizzeria-mark.svg" alt="" />
 
                     <span>
                         <strong>Pizzería</strong>
@@ -78,9 +79,6 @@
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Admin" asp-action="Index">Panel admin</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Admin" asp-action="Imagenes">Imágenes</a>
                                 </li>
                             }
                             <li class="nav-item">

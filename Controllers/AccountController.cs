@@ -112,6 +112,26 @@ public sealed class AccountController : Controller
     [Authorize]
     [HttpPost]
     [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ActualizarPerfil(PerfilViewModel model)
+    {
+        var clienteId = User.GetClienteId();
+        if (clienteId is null)
+            return RedirectToAction(nameof(Login));
+
+        if (!ModelState.IsValid)
+            return await PerfilItemsAsync(clienteId.Value, model);
+
+        var calle = model.Calle.Trim();
+        var altura = model.Altura.Trim();
+        var direccion = $"{calle} {altura}";
+        await _clienteService.ActualizarDireccionAsync(clienteId.Value, model.Telefono.Trim(), calle, altura, direccion);
+        TempData["SuccessMessage"] = "Datos de contacto actualizados.";
+        return RedirectToAction(nameof(Perfil));
+    }
+
+    [Authorize]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -131,11 +151,19 @@ public sealed class AccountController : Controller
             return RedirectToAction(nameof(Login));
 
         var pedidos = await pedidoService.GetByClienteAsync(clienteId.Value);
-        ViewBag.Nombre = User.Identity?.Name;
-        ViewBag.Email = User.FindFirst(ClaimTypes.Email)?.Value;
-        ViewBag.ClienteId = clienteId;
-        ViewBag.Rol = User.EsAdmin() ? Roles.Admin : Roles.Cliente;
-        return View(pedidos);
+        var cliente = await _clienteService.GetByIdAsync(clienteId.Value);
+        var model = new PerfilViewModel
+        {
+            Nombre = User.Identity?.Name ?? cliente?.Nombre ?? string.Empty,
+            Email = User.FindFirst(ClaimTypes.Email)?.Value ?? cliente?.Email ?? string.Empty,
+            Rol = User.EsAdmin() ? Roles.Admin : Roles.Cliente,
+            EsAdmin = User.EsAdmin(),
+            Pedidos = pedidos.ToList(),
+            Calle = cliente?.Calle ?? string.Empty,
+            Altura = cliente?.Altura ?? string.Empty,
+            Telefono = cliente?.Telefono ?? string.Empty
+        };
+        return View(model);
     }
 
     private async Task SignInClienteAsync(string subject, string name, string email)
@@ -161,6 +189,17 @@ public sealed class AccountController : Controller
                 IsPersistent = true,
                 ExpiresUtc = DateTimeOffset.UtcNow.AddDays(30)
             });
+    }
+
+    private async Task<IActionResult> PerfilItemsAsync(int clienteId, PerfilViewModel model)
+    {
+        var pedidoService = HttpContext.RequestServices.GetRequiredService<IPedidoService>();
+        model.Nombre = User.Identity?.Name ?? string.Empty;
+        model.Email = User.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+        model.Rol = User.EsAdmin() ? Roles.Admin : Roles.Cliente;
+        model.EsAdmin = User.EsAdmin();
+        model.Pedidos = (await pedidoService.GetByClienteAsync(clienteId)).ToList();
+        return View(nameof(Perfil), model);
     }
 
     private IActionResult RedirectToLocal(string? returnUrl)

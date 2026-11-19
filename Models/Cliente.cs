@@ -8,6 +8,8 @@ public class Cliente
     public string? Email { get; set; }
     public string? GoogleSubject { get; set; }
     public string Telefono { get; set; } = string.Empty;
+    public string Calle { get; set; } = string.Empty;
+    public string Altura { get; set; } = string.Empty;
     public string Direccion { get; set; } = string.Empty;
     public DateTime FechaRegistro { get; set; } = DateTime.UtcNow;
 }

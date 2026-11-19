@@ -81,7 +81,9 @@ public class PedidosController : Controller
         var items = await BuildViewModelAsync(cart);
         items.ClienteNombre = User.Identity?.Name ?? model.ClienteNombre;
         items.ClienteTelefono = model.ClienteTelefono;
-        items.ClienteDireccion = model.ClienteDireccion;
+        items.ClienteCalle = model.ClienteCalle;
+        items.ClienteAltura = model.ClienteAltura;
+        items.ClienteDireccion = $"{model.ClienteCalle.Trim()} {model.ClienteAltura.Trim()}";
 
         // El nombre sale de la cuenta, no del formulario.
         ModelState.Remove(nameof(PedidoIndexViewModel.ClienteNombre));
@@ -92,7 +94,8 @@ public class PedidosController : Controller
         if (!ModelState.IsValid)
             return View("Index", items);
 
-        await _clientes.ActualizarContactoAsync(clienteId.Value, model.ClienteTelefono.Trim(), model.ClienteDireccion.Trim());
+        var direccion = $"{model.ClienteCalle.Trim()} {model.ClienteAltura.Trim()}";
+        await _clientes.ActualizarDireccionAsync(clienteId.Value, model.ClienteTelefono.Trim(), model.ClienteCalle.Trim(), model.ClienteAltura.Trim(), direccion);
 
         var pedido = await _pedidos.CreateAsync(new CreatePedidoRequest
         {
@@ -115,6 +118,8 @@ public class PedidosController : Controller
         var cliente = await _clientes.GetByIdAsync(clienteId.Value);
         model.ClienteNombre = User.Identity?.Name ?? cliente?.Nombre ?? string.Empty;
         model.ClienteTelefono = cliente?.Telefono ?? string.Empty;
+        model.ClienteCalle = cliente?.Calle ?? string.Empty;
+        model.ClienteAltura = cliente?.Altura ?? string.Empty;
         model.ClienteDireccion = cliente?.Direccion ?? string.Empty;
     }
 

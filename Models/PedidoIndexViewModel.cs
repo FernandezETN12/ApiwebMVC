@@ -11,11 +11,17 @@ public class PedidoIndexViewModel
     [StringLength(150)]
     public string ClienteNombre { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Ingresa un teléfono de contacto.")]
     [StringLength(50)]
     public string ClienteTelefono { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Ingresa la dirección de entrega.")]
+    [Required(ErrorMessage = "Ingresa el nombre de la calle.")]
+    [StringLength(150)]
+    public string ClienteCalle { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Ingresa el número de la calle.")]
+    [StringLength(20)]
+    public string ClienteAltura { get; set; } = string.Empty;
+
     [StringLength(300)]
     public string ClienteDireccion { get; set; } = string.Empty;
 }

@@ -30,6 +30,14 @@ namespace ApiwebMVC.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Altura")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Calle")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Direccion")
                         .IsRequired()
                         .HasColumnType("longtext");

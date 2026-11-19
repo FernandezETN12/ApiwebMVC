@@ -46,3 +46,11 @@ Cookie: {{cookie}}
 ### Pedidos por estado (solo admin)
 GET {{host}}/api/pedidos/estado/EsperaDeConfirmacion
 Cookie: {{cookie}}
+
+
+
+
+
+
+
+

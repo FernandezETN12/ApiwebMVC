@@ -87,7 +87,6 @@ Recomendado: fotos cuadradas o 4:3, de 800 a 1200 px de ancho y menos de 300 KB.
 | Jamón y Morrones | Pizzas | `jamon-y-morrones.jpg` |
 | Fugazzeta | Pizzas | `fugazzeta.jpg` |
 | Calabresa | Pizzas | `calabresa.jpg` |
-| Tomate con Albahaca | Pizzas | `tomate-con-albahaca.jpg` |
 | Margherita | Pizzas | `margherita.jpg` |
 | Rúcula & Parmesano | Pizzas | `rucula-parmesano.jpg` |
 | Diavola | Pizzas | `diavola.jpg` |

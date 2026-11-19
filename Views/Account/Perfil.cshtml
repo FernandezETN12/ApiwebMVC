@@ -1,4 +1,4 @@
-@model IReadOnlyCollection<ApiwebMVC.Models.Pedido>
+@model ApiwebMVC.Models.PerfilViewModel
 
 @{
     ViewData["Title"] = "Mi perfil";
@@ -6,26 +6,48 @@
 
 <section class="profile-page">
     <p class="eyebrow eyebrow-dark">Mi cuenta</p>
-    <h1>Hola, @ViewBag.Nombre</h1>
+    <h1>Hola, @Model.Nombre</h1>
 
     <div class="profile-grid">
         <article class="profile-card">
             <h2>Datos personales</h2>
             <dl class="profile-details">
                 <dt>Nombre</dt>
-                <dd>@ViewBag.Nombre</dd>
+                <dd>@Model.Nombre</dd>
                 <dt>Correo</dt>
-                <dd>@ViewBag.Email</dd>
-                <dt>Cliente</dt>
-                <dd>#@ViewBag.ClienteId</dd>
-                <dt>Rol</dt>
-                <dd>@ViewBag.Rol</dd>
+                <dd>@Model.Email</dd>
+                @if (Model.EsAdmin)
+                {
+                    <dt>Rol</dt>
+                    <dd>@Model.Rol</dd>
+                }
             </dl>
+
+            <form asp-action="ActualizarPerfil" method="post" class="mt-4">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-3">
+                    <label asp-for="Calle" class="form-label">Calle</label>
+                    <input asp-for="Calle" class="form-control" autocomplete="address-line1" />
+                    <span asp-validation-for="Calle" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Altura" class="form-label">Número</label>
+                    <input asp-for="Altura" class="form-control" autocomplete="address-line2" />
+                    <span asp-validation-for="Altura" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Telefono" class="form-label">Teléfono <small class="text-muted">(opcional)</small></label>
+                    <input asp-for="Telefono" class="form-control" autocomplete="tel" />
+                    <span asp-validation-for="Telefono" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar datos</button>
+            </form>
         </article>
 
         <article class="profile-card profile-orders-card">
             <h2>Mis pedidos</h2>
-            @if (Model.Count == 0)
+            @if (Model.Pedidos.Count == 0)
             {
                 <p>Aún no realizaste pedidos.</p>
                 <a class="btn btn-primary" asp-controller="Menu" asp-action="Index">Ver el menú</a>
@@ -33,7 +55,7 @@
             else
             {
                 <div class="profile-orders">
-                    @foreach (var pedido in Model)
+                    @foreach (var pedido in Model.Pedidos)
                     {
                         <article class="profile-order">
                             <div class="profile-order__heading">
