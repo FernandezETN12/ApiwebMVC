@@ -9,11 +9,11 @@ namespace ApiwebMVC.Controllers;
 [Authorize]
 public sealed class PedidosPageController : Controller
 {
-    private readonly IPedidoService _pedidos;
+    private readonly IPedidoApiClient _pedidosApi;
 
-    public PedidosPageController(IPedidoService pedidos)
+    public PedidosPageController(IPedidoApiClient pedidosApi)
     {
-        _pedidos = pedidos;
+        _pedidosApi = pedidosApi;
     }
 
     [HttpGet]
@@ -23,7 +23,7 @@ public sealed class PedidosPageController : Controller
         if (clienteId is null)
             return RedirectToAction("Login", "Account");
 
-        var pedidos = await _pedidos.GetByClienteAsync(clienteId.Value);
+        var pedidos = await _pedidosApi.GetByClienteAsync(clienteId.Value);
         return View(pedidos);
     }
 
@@ -31,13 +31,13 @@ public sealed class PedidosPageController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Cancelar(int id)
     {
-        var pedido = await _pedidos.GetByIdAsync(id);
+        var pedido = await _pedidosApi.GetByIdAsync(id);
         if (pedido is null || pedido.ClienteId != User.GetClienteId())
             return NotFound();
 
         try
         {
-            await _pedidos.DeleteAsync(id);
+            await _pedidosApi.DeleteAsync(id);
             TempData["SuccessMessage"] = $"Pedido #{id} cancelado.";
         }
         catch (ConflictException ex)

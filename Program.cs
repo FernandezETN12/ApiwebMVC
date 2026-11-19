@@ -75,6 +75,11 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromHours(4);
 });
 // Register application services
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient<ApiwebMVC.Services.IPedidoApiClient, ApiwebMVC.Services.PedidoApiClient>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
 builder.Services.AddScoped<ApiwebMVC.Services.IPizzaService, ApiwebMVC.Services.PizzaService>();
 builder.Services.AddScoped<ApiwebMVC.Services.IPedidoService, ApiwebMVC.Services.PedidoService>();
 builder.Services.AddScoped<ApiwebMVC.Services.IClienteService, ApiwebMVC.Services.ClienteService>();

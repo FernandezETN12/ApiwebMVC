@@ -20,12 +20,14 @@ public class PedidosController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly IPedidoService _pedidos;
+    private readonly IPedidoApiClient _pedidosApi;
     private readonly IClienteService _clientes;
 
-    public PedidosController(ApplicationDbContext db, IPedidoService pedidos, IClienteService clientes)
+    public PedidosController(ApplicationDbContext db, IPedidoService pedidos, IPedidoApiClient pedidosApi, IClienteService clientes)
     {
         _db = db;
         _pedidos = pedidos;
+        _pedidosApi = pedidosApi;
         _clientes = clientes;
     }
 
@@ -97,7 +99,7 @@ public class PedidosController : Controller
         var direccion = $"{model.ClienteCalle.Trim()} {model.ClienteAltura.Trim()}";
         await _clientes.ActualizarDireccionAsync(clienteId.Value, model.ClienteTelefono.Trim(), model.ClienteCalle.Trim(), model.ClienteAltura.Trim(), direccion);
 
-        var pedido = await _pedidos.CreateAsync(new CreatePedidoRequest
+        var pedido = await _pedidosApi.CreateAsync(new CreatePedidoRequest
         {
             ClienteId = clienteId.Value,
             Detalles = items.Items
